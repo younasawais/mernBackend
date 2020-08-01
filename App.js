@@ -1,8 +1,11 @@
-var express = require('express');
+const express = require('express');
+const cors = require('cors');
 const app = express();
-app.get('/', (req,res)=>{
+
+app.use(cors());
+app.post('/', (req,res)=>{
    res.send('Assalamualekum');
 });
-app.listen(3000, ()=>{
-   console.log('listening on Port 3000');
+app.listen(4000, ()=>{
+   console.log('listening on Port 4000');
 });
