@@ -7,6 +7,10 @@ mongoose.connect('mongodb://localhost/ads',{
 .then(()=>{console.log("Connected to DB.............................................................")})
 .catch((err)=>("Can't connect to db : " + err));
 
+
+/*****************************************************/
+/************** Article Collection *******************/
+/*****************************************************/
 const addArticleSchema = new mongoose.Schema({
     title                   : String,
     menuItemName            : String,
@@ -20,49 +24,40 @@ const addArticleSchema = new mongoose.Schema({
     creationDate            : String,
     creationTime            : String,
     active                  : Boolean
- })
+ });
+
 const AddArticleModel = mongoose.model('Article', addArticleSchema);
 
 
-async function AddArticle(addArticleModel){
-    const registrar = new AddArticleModel(addArticleModel);
-    const result = await registrar.save();
+async function addArticle(addArticleModel){
+    const article = new AddArticleModel(addArticleModel);
+    const result = await article.save();
     return result;
 }
 
-exports.AddArticle       = AddArticle;
+exports.addArticle       = addArticle;
 
 
+/*****************************************************/
+/***************** Menu Collection *******************/
+/*****************************************************/
+const addMenuSchema = new mongoose.Schema({
+    name                    : String,
+    id                      : String,
+    creationDate            : String,
+    creationTime            : String,
+    active                  : Boolean
+ })
+const AddMenuModel = mongoose.model('menu', addMenuSchema);
 
+async function addMenu(addMenuModel){
+    const menu = new AddMenuModel(addMenuModel);
+    const result = await menu.save();
+    return result;
+}
 
-
-
-
-//  const UserModel = mongoose.model('User', userSchema);
-
-// const domainRegistrar = new mongoose.Schema({ 
-//     name        : String, 
-//     surname     : String,
-//     email       : String,
-//     phoneNumber : Number,
-//     address     : String,
-//     address2    : String,
-//     city        : String,
-//     state       : String,
-//     country     : String,
-//     zip         : String,
-//     studiotorontoEmail   : String,
-//     time        : String,
-//     date        : String,
-//     domainName  : String
-// });
-
-// const RegistrarModel = mongoose.model('Registrar', domainRegistrar);
-
-// async function CreateRegistrar(userInfo){
-//     const registrar = new RegistrarModel(userInfo);
-//     const result = await registrar.save();
-//     return result;
-// }
-
-// exports.CreateRegistrar = CreateRegistrar;
+exports.addMenu       = addMenu;
+/*****************************************************/
+/***************** User Collection *******************/
+/*****************************************************/
+// TODO

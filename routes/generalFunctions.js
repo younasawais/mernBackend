@@ -1,6 +1,4 @@
 const { AddArticle } = require("../mongoWorks");
-
-
 /************* Random functions ****************/
 function current(){
     let date = new Date();
@@ -9,37 +7,95 @@ function current(){
     let yyyy = date.getFullYear();
     let datum = {
         today : dd + '/' + mm + '/' + yyyy,
-        time : date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds()}
+        time : date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(),
+        id: yyyy+mm+dd+date.getHours() + date.getMinutes() + date.getSeconds()}
     return datum;
 }
 
-function addArticleFiltered(obj){
-    const { title, menuItemName, newMenu, parentItem, selectedMenu, 
-        createParent, linkId, tags, text1, text2, reference, active, 
-        checkBoxCreateMenu, addSubItemToParent, checkBoxCreateParent} = obj;
-
-    if(!addSubItemToParent && !checkBoxCreateParent){
-        let menu;
-        if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
-        let newAddArticle = 
-             {   title                   : title,
-                 menuItemName            : menuItemName,
-                 parentItem              : '',
-                 menu                    : menu,
-                 linkId                  : linkId,
-                 tags                    : tags,
-                 text1                   : text1,
-                 text2                   : text2,
-                 creationDate            : current().today,
-                 creationTime            : current().time,
-                 reference               : reference,
-                 active                  : active
-        };
-        return newAddArticle;
-    }else if(addSubItemToParent || checkBoxCreateParent){
-        
-    }
+function textToLink(name){
+    let temp = name.toLowerCase().replace(/\s/g, '-');
+    return temp;
 }
 
-exports.current = current;
-exports.addArticleFiltered = addArticleFiltered;
+/*****************************************************/
+/***************** add new Article *******************/
+/*****************************************************/
+function addArticleFiltered(obj){
+    const { title, menuItemName, newMenu, parentItemSelected, selectedMenu, 
+        createParent, tags, text1, text2, reference, active, 
+        checkBoxCreateMenu, addSubItemToParent, checkBoxCreateParent} = obj;
+    console.log(checkBoxCreateParent);
+    let menu;
+    if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
+    let parent;
+    if(checkBoxCreateParent){parent = createParent}
+    else if(addSubItemToParent){parent = parentItemSelected}else{parent = parentItemSelected};
+
+    let newAddArticle = {   title                   : title,
+                            menuItemName            : menuItemName,
+                            parentItem              : parent,
+                            menu                    : menu,
+                            linkId                  : current().id + '-' + textToLink(title),
+                            tags                    : tags,
+                            text1                   : text1,
+                            text2                   : text2,
+                            creationDate            : current().today,
+                            creationTime            : current().time,
+                            reference               : reference,
+                            active                  : active};
+    return newAddArticle;
+}
+
+/*****************************************************/
+/***************** add new Parent *******************/
+/*****************************************************/
+function addArticleEmptyParent(obj){
+    const { newMenu, selectedMenu, createParent, active, checkBoxCreateMenu} = obj;
+    let menu;
+    if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
+    // let parent;
+    // if(checkBoxCreateParent){parent = createParent}
+    // else if(addSubItemToParent){parent = parentItemSelected}else{parent = parentItemSelected};
+
+    let newAddParent = {    title                   : createParent,
+                            parentItem              : '',
+                            menu                    : menu,
+                            linkId                  : current().id + '-' + textToLink(createParent),
+                            tags                    : '',
+                            text1                   : '',
+                            text2                   : '',
+                            creationDate            : current().today,
+                            creationTime            : current().time,
+                            reference               : '',
+                            active                  : active};
+    // console.log('newAddParent');
+    // console.log(newAddParent);
+    return newAddParent;
+}
+
+/*****************************************************/
+/******************** add new menu *******************/
+/*****************************************************/
+function addNewMenu(obj){
+    const { newMenu, checkBoxCreateMenu} = obj;
+    let menu;
+    if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
+    // let parent;
+    // if(checkBoxCreateParent){parent = createParent}
+    // else if(addSubItemToParent){parent = parentItemSelected}else{parent = parentItemSelected};
+
+    let addNewMenu = {    
+        name                    : newMenu,
+        id                      : current().id + '-' + textToLink(newMenu),
+        creationDate            : current().today,
+        creationTime            : current().time,
+        active                  : true};
+    console.log('addNewMenu');
+    console.log(addNewMenu);
+    return addNewMenu;
+}
+
+exports.current                 = current;
+exports.addArticleFiltered      = addArticleFiltered;
+exports.addArticleEmptyParent   = addArticleEmptyParent;
+exports.addNewMenu              = addNewMenu;

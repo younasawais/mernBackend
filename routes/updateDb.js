@@ -1,5 +1,5 @@
-const {AddArticle}      = require('../mongoWorks');
-const {current, addArticleFiltered}         = require('./generalFunctions.js');
+const {addArticle, addMenu}      = require('../mongoWorks');
+const {addArticleFiltered, addArticleEmptyParent, addNewMenu} = require('./generalFunctions.js');
 
 module.exports = function(app){
     /*****************************************************/
@@ -10,27 +10,21 @@ module.exports = function(app){
         // const { title, menuItemName, newMenu, parentItem, selectedMenu, 
         //    createParent, linkId, tags, text1, text2, reference, active, 
         //    checkBoxCreateMenu, addSubItemToParent, checkBoxCreateParent} = req.body;
+        //const { checkBoxCreateParent } = req.body;
 
-        // Save article according to checkboxes
-        // let addArticle = 
-        //      {   title                   : title,
-        //          menuItemName            : menuItemName,
-        //          newMenu                 : newMenu,
-        //          parentItem              : parentItem,
-        //          selectedMenu            : selectedMenu,
-        //          createParent            : createParent,
-        //          linkId                  : linkId,
-        //          tags                    : tags,
-        //          text1                   : text1,
-        //          text2                   : text2,
-        //          creationDate            : current().today,
-        //          creationTime            : current().time,
-        //          reference               : reference,
-        //          active                  : active
-        // };
-        /************* Create user in DB ****************/
-        const resultaddArticle          = await AddArticle(addArticleFiltered(req.body));
+        /************* Add Article in DB ****************/
+        const resultaddArticle = await addArticle(addArticleFiltered(req.body));
         console.log(resultaddArticle);
+        /************* Add Parent in DB ****************/
+        if(req.body.checkBoxCreateParent){
+            const resultaddParent = await addArticle(addArticleEmptyParent(req.body));
+            // console.log('newAddParent');
+            console.log(resultaddParent);}
+        if(req.body.checkBoxCreateMenu){
+            const resultAddMenu = await addMenu(addNewMenu(req.body))
+            console.log(resultAddMenu);
+        }
+        
         res.send('check db');
      });
      
