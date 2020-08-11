@@ -28,6 +28,20 @@ module.exports = function(app){
         res.send('check db');
      });
      
+     app.post('/addArticleMenuData', async (req, res)=>{
+         console.log('Received from : ',req.body);
+        const menus = [{
+                name : 'spaceX',
+                id: '9230303-spacex'
+            },{
+                name : 'Habib',
+                id: '9230303-habib'                
+            },{
+                name : 'Jannah',
+                id: '9230303-jannah'                
+            }]
+        res.send(menus);
+        });
     /*****************************************************/
     /*********************** Home ************************/
     /*****************************************************/
