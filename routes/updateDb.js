@@ -1,7 +1,33 @@
 const {addArticle, addMenu}      = require('../mongoWorks');
 const {addArticleFiltered, addArticleEmptyParent, addNewMenu} = require('./generalFunctions.js');
+const multer = require('multer');
 
 module.exports = function(app){
+    /*****************************************************/
+    /********************** Upload Test ****************/
+    /*****************************************************/
+    const storage = multer.diskStorage({
+        destination : './pictures/',
+        filename : function(req,file,cb){
+            cb(null,file.originalname)
+        }
+    })
+
+    const upload = multer({
+        storage : storage
+    }).single('file');
+
+    app.post('/uploadTest', async (req, res)=>{
+        upload(req,res, function(err){
+            if(err){
+                res.status(500).send(err);
+            }{
+                res.status(200).send(req.file);
+            }
+        })
+    });
+
+
     /*****************************************************/
     /***************** Send back userInfo ****************/
     /*****************************************************/
@@ -28,6 +54,10 @@ module.exports = function(app){
         res.send('check db');
      });
      
+    
+    /*****************************************************/
+    /********************** Add menu data ****************/
+    /*****************************************************/
      app.post('/addArticleMenuData', async (req, res)=>{
          console.log('Received from : ',req.body);
         const menus = [{
