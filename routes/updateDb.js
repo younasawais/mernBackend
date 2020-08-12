@@ -4,19 +4,8 @@ const multer = require('multer');
 
 module.exports = function(app){
     /*****************************************************/
-    /********************** Upload Test ****************/
+    /****************** Multi Upload Test ****************/
     /*****************************************************/
-    const storage = multer.diskStorage({
-        destination : './pictures/',
-        filename : function(req,file,cb){
-            cb(null,file.originalname)
-        }
-    })
-
-    const upload = multer({
-        storage : storage
-    }).single('file');
-
     app.post('/uploadTest', async (req, res)=>{
         upload(req,res, function(err){
             if(err){
@@ -26,6 +15,39 @@ module.exports = function(app){
             }
         })
     });
+    
+    const storage = multer.diskStorage({
+        destination : './fileUpload/',
+        filename : function(req,file,cb){
+            cb(null,file.originalname)
+        }
+    })
+
+    let upload = multer({ storage : storage }).array('file');
+
+    /*****************************************************/
+    /********************** Upload Test ****************/
+    /*****************************************************/
+    // const storage = multer.diskStorage({
+    //     destination : './pictures/',
+    //     filename : function(req,file,cb){
+    //         cb(null,file.originalname)
+    //     }
+    // })
+
+    // const upload = multer({
+    //     storage : storage
+    // }).single('file');
+
+    // app.post('/uploadTest', async (req, res)=>{
+    //     upload(req,res, function(err){
+    //         if(err){
+    //             res.status(500).send(err);
+    //         }{
+    //             res.status(200).send(req.file);
+    //         }
+    //     })
+    // });
 
 
     /*****************************************************/
