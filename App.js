@@ -10,8 +10,6 @@ if(typeof process.env.PORT === 'undefined'){
 }
 require('./routes/updateDb')(app);
 
-
-
 app.listen(4000, ()=>{
    console.log('listening on Port 4000');
 });

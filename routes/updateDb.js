@@ -1,19 +1,32 @@
 const {addArticle, addMenu}      = require('../mongoWorks');
 const {addArticleFiltered, addArticleEmptyParent, addNewMenu} = require('./generalFunctions.js');
 const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const util = require('util');
 
 module.exports = function(app){
     /*****************************************************/
     /****************** Multi Upload Test ****************/
     /*****************************************************/
-    app.post('/uploadTest', async (req, res)=>{
+    // app.post('/uploadTest2', upload.array('files', 2), function (req, res) {
+    //     console.log(req.bodyxczx);
+    //     // req.files is array of `photos` files
+    //     // req.body will contain the text fields, if there were any
+    //     res.status(200).send(req.files);
+    //   })
+
+    /*****************************************************/
+    /****************** Multi Upload Test ****************/
+    /*****************************************************/
+    app.post('/addArticleData', async (req, res)=>{
+        console.log(Object.keys(req.body));
         upload(req,res, function(err){
-            console.log(req);
-            if(err){
-                res.status(500).send(err);
-            }{
-                res.status(200).send(req.file);
-            }
+            //console.log('---------- Body ------------');
+            //console.log(util.inspect(req.body.textData.addArticle, {showHidden: false, depth: null}))
+            //console.log(Object.keys(req.body.textData));
+            //console.log(req.body);
+            //console.log('---------- END Body ------------');
+            if(err){res.status(500).send(err);}else {res.status(200).send(req.file);}
         })
     });
     
