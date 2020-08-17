@@ -1,10 +1,17 @@
 const { AddArticle } = require("../mongoWorks");
 /************* Random functions ****************/
+
+/*****************************************************/
+/******************** Current time *******************/
+/*****************************************************/
 function current(){
     let date = new Date();
+    // let tempYear = date.getFullYear();
+    // console.log(tempYear);
+
     let dd = String(date.getDate()).padStart(2, '0');
     let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-    let yyyy = date.getFullYear();
+    let yyyy = date.getFullYear() - 2000;
     let datum = {
         today : dd + '/' + mm + '/' + yyyy,
         time : date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(),
@@ -20,11 +27,12 @@ function textToLink(name){
 /*****************************************************/
 /***************** add new Article *******************/
 /*****************************************************/
-function addArticleFiltered(obj){
+function addArticleFiltered(obj, idTime){
     const { title, menuItemName, newMenu, parentItemSelected, selectedMenu, 
         createParent, tags, text1, text2, reference, active, 
-        checkBoxCreateMenu, addSubItemToParent, checkBoxCreateParent} = obj;
-    console.log(checkBoxCreateParent);
+        checkBoxCreateMenu, addSubItemToParent, checkBoxCreateParent, 
+        imageName1, imageName2} = obj;
+    //logToConsole('req body info ', obj);
     let menu;
     if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
     let parent;
@@ -35,10 +43,12 @@ function addArticleFiltered(obj){
                             menuItemName            : menuItemName,
                             parentItem              : parent,
                             menu                    : menu,
-                            linkId                  : current().id + '-' + textToLink(title),
+                            linkId                  : idTime + '-' + textToLink(title),
                             tags                    : tags,
-                            text1                   : text1,
-                            text2                   : text2,
+                            text1                   : idTime + '-' + text1,
+                            text2                   : idTime + '-' + text2,
+                            imageName1              : imageName1,
+                            imageName2              : imageName2,
                             creationDate            : current().today,
                             creationTime            : current().time,
                             reference               : reference,
@@ -49,7 +59,7 @@ function addArticleFiltered(obj){
 /*****************************************************/
 /***************** add new Parent *******************/
 /*****************************************************/
-function addArticleEmptyParent(obj){
+function addArticleEmptyParent(obj, idTime){
     const { newMenu, selectedMenu, createParent, active, checkBoxCreateMenu} = obj;
     let menu;
     if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
@@ -60,10 +70,12 @@ function addArticleEmptyParent(obj){
     let newAddParent = {    title                   : createParent,
                             parentItem              : '',
                             menu                    : menu,
-                            linkId                  : current().id + '-' + textToLink(createParent),
+                            linkId                  : idTime + '-' + textToLink(createParent),
                             tags                    : '',
                             text1                   : '',
                             text2                   : '',
+                            imageName1              : '',
+                            imageName2              : '',
                             creationDate            : current().today,
                             creationTime            : current().time,
                             reference               : '',
@@ -76,7 +88,7 @@ function addArticleEmptyParent(obj){
 /*****************************************************/
 /******************** add new menu *******************/
 /*****************************************************/
-function addNewMenu(obj){
+function addNewMenu(obj, idTime){
     const { newMenu, checkBoxCreateMenu} = obj;
     let menu;
     if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
@@ -86,7 +98,7 @@ function addNewMenu(obj){
 
     let addNewMenu = {    
         name                    : newMenu,
-        id                      : current().id + '-' + textToLink(newMenu),
+        id                      : idTime + '-' + textToLink(newMenu),
         creationDate            : current().today,
         creationTime            : current().time,
         active                  : true};
@@ -95,7 +107,19 @@ function addNewMenu(obj){
     return addNewMenu;
 }
 
+/*****************************************************/
+/******************** console log  *******************/
+/*****************************************************/
+function logToConsole(comment, value){
+    console.log("*************************************** " + comment + " *********************************");
+    console.log("*************************************** " + current().time +  " *********************************");
+    console.log(value);
+    console.log("********************************* END : " + comment + " *********************************");
+}
+
+
 exports.current                 = current;
 exports.addArticleFiltered      = addArticleFiltered;
 exports.addArticleEmptyParent   = addArticleEmptyParent;
 exports.addNewMenu              = addNewMenu;
+exports.logToConsole            = logToConsole;

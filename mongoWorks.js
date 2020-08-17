@@ -20,6 +20,8 @@ const addArticleSchema = new mongoose.Schema({
     tags                    : String,
     text1                   : String,
     text2                   : String,
+    imageName1              : String,
+    imageName2              : String,
     reference               : String,
     creationDate            : String,
     creationTime            : String,

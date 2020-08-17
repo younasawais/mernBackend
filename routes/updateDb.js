@@ -1,31 +1,33 @@
 const {addArticle, addMenu}      = require('../mongoWorks');
-const {addArticleFiltered, addArticleEmptyParent, addNewMenu} = require('./generalFunctions.js');
+const {addArticleFiltered, addArticleEmptyParent, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-const util = require('util');
 
 module.exports = function(app){
     /*****************************************************/
     /****************** Multi Upload Test ****************/
     /*****************************************************/
-    // app.post('/uploadTest2', upload.array('files', 2), function (req, res) {
-    //     console.log(req.bodyxczx);
-    //     // req.files is array of `photos` files
-    //     // req.body will contain the text fields, if there were any
-    //     res.status(200).send(req.files);
-    //   })
-
-    /*****************************************************/
-    /****************** Multi Upload Test ****************/
-    /*****************************************************/
+    let idTimePic;
     app.post('/addArticleData', async (req, res)=>{
-        console.log(Object.keys(req.body));
-        upload(req,res, function(err){
-            //console.log('---------- Body ------------');
-            //console.log(util.inspect(req.body.textData.addArticle, {showHidden: false, depth: null}))
-            //console.log(Object.keys(req.body.textData));
-            //console.log(req.body);
-            //console.log('---------- END Body ------------');
+        const idTime = current().id;
+        idTimePic = idTime;
+        upload(req,res, async function(err){
+            logToConsole('req.files 2 : ',req.files);
+            logToConsole('req.body 2 : ',req.body);
+
+            /************* Add Article in DB ****************/
+            const resultaddArticle = await addArticle(addArticleFiltered(req.body, idTime));
+            logToConsole('resultaddArticle',resultaddArticle);
+            /************* Add Parent in DB ****************/
+            if(req.body.checkBoxCreateParent){
+                const resultaddParent = await addArticle(addArticleEmptyParent(req.body, idTime));
+                // console.log('newAddParent');
+                logToConsole('resulAddParent',resultaddParent);
+                console.log(resultaddParent);}
+            if(req.body.checkBoxCreateMenu){
+                const resultAddMenu = await addMenu(addNewMenu(req.body, idTime))
+                logToConsole('resultAddMenu',resultAddMenu);
+            }           
+
             if(err){res.status(500).send(err);}else {res.status(200).send(req.file);}
         })
     });
@@ -33,7 +35,7 @@ module.exports = function(app){
     const storage = multer.diskStorage({
         destination : './fileUpload/',
         filename : function(req, file, cb){
-            cb(null,file.originalname)
+            cb(null,idTimePic + '-' + file.originalname)
         }
     })
 
