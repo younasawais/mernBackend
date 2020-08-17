@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+//const {logToConsole} = require('./generalFunctions.js');
 
 mongoose.connect('mongodb://localhost/ads',{
    useNewUrlParser: true,

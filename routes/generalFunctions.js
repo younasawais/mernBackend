@@ -33,8 +33,9 @@ function addArticleFiltered(obj, idTime){
         checkBoxCreateMenu, addSubItemToParent, checkBoxCreateParent, 
         imageName1, imageName2} = obj;
     //logToConsole('req body info ', obj);
+    logToConsole('obj addArticleFiltered input :: ',obj);
     let menu;
-    if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
+    if(checkBoxCreateMenu !== 'false'){menu = newMenu }else{menu = selectedMenu};
     let parent;
     if(checkBoxCreateParent){parent = createParent}
     else if(addSubItemToParent){parent = parentItemSelected}else{parent = parentItemSelected};
@@ -53,6 +54,7 @@ function addArticleFiltered(obj, idTime){
                             creationTime            : current().time,
                             reference               : reference,
                             active                  : active};
+    logToConsole('addArticleFiltered :: ',newAddArticle);
     return newAddArticle;
 }
 
@@ -70,6 +72,7 @@ function addArticleEmptyParent(obj, idTime){
     let newAddParent = {    title                   : createParent,
                             parentItem              : '',
                             menu                    : menu,
+                            menuItemName            : createParent,
                             linkId                  : idTime + '-' + textToLink(createParent),
                             tags                    : '',
                             text1                   : '',

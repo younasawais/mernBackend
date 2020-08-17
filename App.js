@@ -9,6 +9,7 @@ if(typeof process.env.PORT === 'undefined'){
    require('dotenv').config({path:'./env.production'});
 }
 require('./routes/updateDb')(app);
+require('./routes/infoRoute')(app);
 
 app.listen(4000, ()=>{
    console.log('listening on Port 4000');
