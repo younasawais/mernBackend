@@ -4,6 +4,15 @@ const multer = require('multer');
 
 module.exports = function(app){
     /*****************************************************/
+    /****************** Add sample article data **********/
+    /*****************************************************/
+    app.post('/addArticleData', async (req, res)=>{
+
+
+        res.status(200).send(result);
+    });
+
+    /*****************************************************/
     /****************** Multi Upload Test ****************/
     /*****************************************************/
     let idTimePic;
@@ -36,7 +45,7 @@ module.exports = function(app){
         filename : function(req, file, cb){
             cb(null,idTimePic + '-' + file.originalname)
         }
-    })
-
+    });
+    
     let upload = multer({ storage : storage }).array('file');    
 }
