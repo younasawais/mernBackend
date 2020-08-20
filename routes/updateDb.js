@@ -6,10 +6,15 @@ module.exports = function(app){
     /*****************************************************/
     /****************** Add sample article data **********/
     /*****************************************************/
-    app.post('/addArticleData', async (req, res)=>{
-
-
-        res.status(200).send(result);
+    app.post('/addSampleData', async (req, res)=>{
+        const {articles} = req.body;
+        console.log(articles)
+        let resultaddArticle = null;
+        for (let i = 0; i < articles.length; i++) {
+            resultaddArticle = await addArticle(articles[i]);
+            logToConsole('resultaddArticle : '+ i,resultaddArticle);
+        }
+        res.status(200).send(req.body);
     });
 
     /*****************************************************/

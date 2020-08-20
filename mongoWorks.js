@@ -60,7 +60,24 @@ async function addMenu(addMenuModel){
 }
 
 exports.addMenu       = addMenu;
+exports.AddArticleModel = AddArticleModel;
 /*****************************************************/
 /***************** User Collection *******************/
 /*****************************************************/
 // TODO
+
+/*****************************************************/
+/***************** Sample articles *******************/
+/*****************************************************/
+
+// const addSampleArticlesSchema = new mongoose.Schema([]);
+
+// const AddSampleArticles = mongoose.model('Article', addSampleArticlesSchema);
+
+
+// async function addSampleArticles(addSampleArticles){
+//     const sampleArticles = new AddSampleArticles(addSampleArticles);
+//     const result = await sampleArticles.save();
+//     return result;
+// }
+//exports.addSampleArticles   = addSampleArticles;
