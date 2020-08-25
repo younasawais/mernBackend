@@ -31,14 +31,14 @@ module.exports = function(app){
        });
 
     /*****************************************************/
-    /*********************** Home ************************/
+    /****************** Get articles list ****************/
     /*****************************************************/
     app.post('/getArticleListManageArticles', async(req,res)=>{
         // const token     = req.body.token;
         // const {email}   = checkToken(token);
         // console.log(email)
         const articles   = await AddArticleModel.find();
-        console.log(articles);
+        //console.log(articles);
         res.send(articles);
     });
 }
