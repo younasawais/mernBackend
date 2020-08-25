@@ -1,13 +1,15 @@
-//const {addArticle, addMenu}      = require('../mongoWorks');
+const {AddArticleModel}      = require('../mongoWorks');
 //const {addArticleFiltered, addArticleEmptyParent, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
-const multer = require('multer');
+const multer        = require('multer');
+const Cryptr        = require('cryptr');
+const cryptr        = new Cryptr('maryam123!');
 
 module.exports = function(app){
     /*****************************************************/
     /*********************** Home ************************/
     /*****************************************************/
-    app.post('/', (req,res)=>{
-        res.send('Assalamualekum');
+    app.post('/encode', (req,res)=>{
+        res.send(cryptr.encrypt('475734255Bb'));
     });
         
     /*****************************************************/
@@ -27,4 +29,16 @@ module.exports = function(app){
            }]
        res.send(menus);
        });
+
+    /*****************************************************/
+    /*********************** Home ************************/
+    /*****************************************************/
+    app.post('/getArticleListManageArticles', async(req,res)=>{
+        // const token     = req.body.token;
+        // const {email}   = checkToken(token);
+        // console.log(email)
+        const articles   = await AddArticleModel.find();
+        console.log(articles);
+        res.send(articles);
+    });
 }
