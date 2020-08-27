@@ -1,4 +1,4 @@
-const {addArticle, addMenu}      = require('../mongoWorks');
+const {addArticle, addMenu, AddArticleModel}      = require('../mongoWorks');
 const {addArticleFiltered, addArticleEmptyParent, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
 const multer = require('multer');
 
@@ -52,5 +52,22 @@ module.exports = function(app){
         }
     });
     
-    let upload = multer({ storage : storage }).array('file');    
+    let upload = multer({ storage : storage }).array('file');   
+
+    /*****************************************************/
+    /******* Delete & Get updated articles list **********/
+    /*****************************************************/
+    app.post('/publishArticlesgetUpdatedList', async(req,res)=>{
+        const {publishIds, active}     = req.body;
+        logToConsole('publishIds', publishIds);
+        logToConsole('active', active);
+        let response = null;
+        for (let i = 0; i < publishIds.length; i++) {
+            response  = await AddArticleModel.findOneAndUpdate({'linkId' : publishIds[i].id}, {'active' : active});
+            console.log(response);
+        }
+        const articles   = await AddArticleModel.find();
+        
+        res.send(articles);
+    });
 }
