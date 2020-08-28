@@ -1,5 +1,6 @@
 const {addArticle, addMenu, AddArticleModel}      = require('../mongoWorks');
 const {addArticleFiltered, addArticleEmptyParent, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
+const { AddMenuModel } = require("../mongoWorks");
 const multer = require('multer');
 
 module.exports = function(app){
@@ -7,12 +8,18 @@ module.exports = function(app){
     /****************** Add sample article data **********/
     /*****************************************************/
     app.post('/addSampleData', async (req, res)=>{
-        const {articles} = req.body;
+        const {articles, menus} = req.body;
         //console.log(articles)
         let resultaddArticle = null;
         for (let i = 0; i < articles.length; i++) {
             resultaddArticle = await addArticle(articles[i]);
             //logToConsole('resultaddArticle : '+ i,resultaddArticle);
+        }
+        for(let j = 0; j < menus.length; j++ ){
+            //resultAddMenu = await AddMenuModel(menus[j]);
+            const menu = new AddMenuModel(menus[j]);
+            const resultMenu = await menu.save();
+            logToConsole('result:' + j, resultMenu);
         }
         res.status(200).send(req.body);
     });
@@ -55,7 +62,7 @@ module.exports = function(app){
     let upload = multer({ storage : storage }).array('file');   
 
     /*****************************************************/
-    /******* Delete & Get updated articles list **********/
+    /**** (de)activate & Get updated articles list *******/
     /*****************************************************/
     app.post('/publishArticlesgetUpdatedList', async(req,res)=>{
         const {publishIds, active}     = req.body;

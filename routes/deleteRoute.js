@@ -9,8 +9,8 @@ module.exports = function(app){
         const {deleteIds}     = req.body;
         let totalDeleted = 0;
         console.log(deleteIds);
-        for (let i = 0; i < deleteIds.length; i++) {
-            let deleteResponse = await AddArticleModel.deleteMany({'parentItem' : deleteIds[0].id});
+        for (let j = 0; j < deleteIds.length; j++) {
+            let deleteResponse = await AddArticleModel.deleteMany({'parentItem' : deleteIds[j].id});
             totalDeleted =  totalDeleted + deleteResponse.deletedCount;
             logToConsole('deleteResponse', deleteResponse);            
         }
@@ -22,7 +22,5 @@ module.exports = function(app){
         const articles   = await AddArticleModel.find();
         logToConsole('totalDeleted', totalDeleted);
         res.status(200).send({'articles': articles,'totalDeleted' :totalDeleted });
-        
-        
     });
 }

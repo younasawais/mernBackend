@@ -39,6 +39,7 @@ async function addArticle(addArticleModel){
 }
 
 exports.addArticle       = addArticle;
+exports.AddArticleModel = AddArticleModel;
 
 
 /*****************************************************/
@@ -60,7 +61,7 @@ async function addMenu(addMenuModel){
 }
 
 exports.addMenu       = addMenu;
-exports.AddArticleModel = AddArticleModel;
+exports.AddMenuModel  = AddMenuModel ;
 /*****************************************************/
 /***************** User Collection *******************/
 /*****************************************************/
