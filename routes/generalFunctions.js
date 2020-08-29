@@ -37,7 +37,7 @@ function addArticleFiltered(obj, idTime){
     let menu;
     if(checkBoxCreateMenu !== 'false'){menu = newMenu }else{menu = selectedMenu};
     let parent;
-    if(checkBoxCreateParent !== 'false'){parent = createParent}
+    if(checkBoxCreateParent !== 'false'){parent = idTime + '-' + createParent}
     else if(parentItemSelectedId !== "false"){parent = parentItemSelectedId}else{parent = parentItemSelectedId};
 
     let newAddArticle = {   title                   : title,
@@ -64,7 +64,7 @@ function addArticleFiltered(obj, idTime){
 function addArticleEmptyParent(obj, idTime){
     const { newMenu, selectedMenu, createParent, active, checkBoxCreateMenu} = obj;
     let menu;
-    if(checkBoxCreateMenu){menu = newMenu }else{menu = selectedMenu};
+    if(checkBoxCreateMenu !== 'false'){menu = newMenu }else{menu = selectedMenu};
     // let parent;
     // if(checkBoxCreateParent){parent = createParent}
     // else if(addSubItemToParent){parent = parentItemSelected}else{parent = parentItemSelected};
