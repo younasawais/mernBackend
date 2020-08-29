@@ -21,8 +21,7 @@ module.exports = function(app){
             const parentArticles   = await AddArticleModel
                 .find({'parentItem' : ''})
                 .select({title: 1, linkId: 1, menu: 1});
-            logToConsole('parentArticles', parentArticles);
-            //res.send({'menus': menus},{'articles' : articles} );
+            //logToConsole('parentArticles', parentArticles);
             res.status(200).send({'menus': menus,'parentArticles' : parentArticles});
         });
 

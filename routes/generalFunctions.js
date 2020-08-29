@@ -28,17 +28,17 @@ function textToLink(name){
 /***************** add new Article *******************/
 /*****************************************************/
 function addArticleFiltered(obj, idTime){
-    const { title, menuItemName, newMenu, parentItemSelected, selectedMenu, 
+    const { title, menuItemName, newMenu, parentItemSelected, parentItemSelectedId, selectedMenu, 
         createParent, tags, text1, text2, reference, active, 
         checkBoxCreateMenu, addSubItemToParent, checkBoxCreateParent, 
         imageName1, imageName2} = obj;
     //logToConsole('req body info ', obj);
-    logToConsole('obj addArticleFiltered input :: ',obj);
+    //logToConsole('obj addArticleFiltered input :: ',obj);
     let menu;
     if(checkBoxCreateMenu !== 'false'){menu = newMenu }else{menu = selectedMenu};
     let parent;
-    if(checkBoxCreateParent){parent = createParent}
-    else if(addSubItemToParent){parent = parentItemSelected}else{parent = parentItemSelected};
+    if(checkBoxCreateParent !== 'false'){parent = createParent}
+    else if(parentItemSelectedId !== "false"){parent = parentItemSelectedId}else{parent = parentItemSelectedId};
 
     let newAddArticle = {   title                   : title,
                             menuItemName            : menuItemName,
@@ -54,7 +54,7 @@ function addArticleFiltered(obj, idTime){
                             creationTime            : current().time,
                             reference               : reference,
                             active                  : active};
-    logToConsole('addArticleFiltered :: ',newAddArticle);
+    //logToConsole('addArticleFiltered :: ',newAddArticle);
     return newAddArticle;
 }
 

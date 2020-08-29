@@ -36,14 +36,15 @@ module.exports = function(app){
         upload(req,res, async function(err){
             /************* Add Article in DB ****************/
             const resultaddArticle = await addArticle(addArticleFiltered(req.body, idTime));
-            logToConsole('resultaddArticle',resultaddArticle);
+            //logToConsole('resultaddArticle general',resultaddArticle);
             /************* Add Parent in DB ****************/
             if(req.body.checkBoxCreateParent !== 'false'){
                 resultaddParent = await addArticle(addArticleEmptyParent(req.body, idTime));
-                logToConsole('resulAddParent',resultaddParent)}
+                logToConsole('resulAddParent createParent true',resultaddParent)}
             if(req.body.checkBoxCreateMenu !== 'false'){
                 resultAddMenu = await addMenu(addNewMenu(req.body, idTime))
-                logToConsole('resultAddMenu',resultAddMenu); }
+                logToConsole('resultAddMenu createMenu true',resultAddMenu); }
+            /************* Reply to client ****************/
             if(err){res.status(500).send(err);}else {res.status(200).send({
                 'resultaddArticle'  : resultaddArticle,
                 'resulAddParent'    : resultaddParent,
