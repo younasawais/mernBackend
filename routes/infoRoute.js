@@ -2,6 +2,7 @@ const {AddArticleModel, AddMenuModel}      = require('../mongoWorks');
 //const {addArticleFiltered, addArticleEmptyParent, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
 const multer        = require('multer');
 const Cryptr        = require('cryptr');
+const { logToConsole } = require('./generalFunctions');
 const cryptr        = new Cryptr('maryam123!');
 
 module.exports = function(app){
@@ -16,27 +17,19 @@ module.exports = function(app){
     /********************** Add menu data ****************/
     /*****************************************************/
     app.post('/addArticleMenuData', async (req, res)=>{
-        const menus = await AddMenuModel.find();
-        // const menus = [{
-        //         name : 'spaceX',
-        //         id: '9230303-spacex'
-        //     },{
-        //         name : 'Habib',
-        //         id: '9230303-habib'                
-        //     },{
-        //         name : 'Jannah',
-        //         id: '9230303-jannah'                
-        //     }]
-        res.send(menus);
+            const menus = await AddMenuModel.find();
+            const parentArticles   = await AddArticleModel
+                .find({'parentItem' : ''})
+                .select({title: 1, linkId: 1, menu: 1});
+            logToConsole('parentArticles', parentArticles);
+            //res.send({'menus': menus},{'articles' : articles} );
+            res.status(200).send({'menus': menus,'parentArticles' : parentArticles});
         });
 
     /*****************************************************/
     /****************** Get articles list ****************/
     /*****************************************************/
     app.post('/getArticleListManageArticles', async(req,res)=>{
-        // const token     = req.body.token;
-        // const {email}   = checkToken(token);
-        // console.log(email)
         const articles   = await AddArticleModel.find();
         //console.log(articles);
         res.send(articles);

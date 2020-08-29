@@ -8,11 +8,11 @@ module.exports = function(app){
     app.post('/deleteArticlesgetUpdatedList', async(req,res)=>{
         const {deleteIds}     = req.body;
         let totalDeleted = 0;
-        console.log(deleteIds);
+        //console.log(deleteIds);
         for (let j = 0; j < deleteIds.length; j++) {
             let deleteResponse = await AddArticleModel.deleteMany({'parentItem' : deleteIds[j].id});
             totalDeleted =  totalDeleted + deleteResponse.deletedCount;
-            logToConsole('deleteResponse', deleteResponse);            
+            //logToConsole('deleteResponse', deleteResponse);            
         }
         let response = null;
         for (let i = 0; i < deleteIds.length; i++) {
@@ -20,7 +20,7 @@ module.exports = function(app){
             totalDeleted =  totalDeleted + response.deletedCount;
         }
         const articles   = await AddArticleModel.find();
-        logToConsole('totalDeleted', totalDeleted);
+        //logToConsole('totalDeleted', totalDeleted);
         res.status(200).send({'articles': articles,'totalDeleted' :totalDeleted });
     });
 }
