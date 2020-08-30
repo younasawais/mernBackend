@@ -39,6 +39,10 @@ function addArticleFiltered(obj, idTime){
     let parent;
     if(checkBoxCreateParent !== 'false'){parent = idTime + '-' + createParent}
     else if(parentItemSelectedId !== "false"){parent = parentItemSelectedId}else{parent = parentItemSelectedId};
+    let idTimeImg1 = idTime + '-';
+    let idTimeImg2 = idTime + '-';
+    if(imageName1 === ""){idTimeImg1 = ""};
+    if(imageName2 === ""){idTimeImg2 = ""};
 
     let newAddArticle = {   title                   : title,
                             menuItemName            : menuItemName,
@@ -48,8 +52,8 @@ function addArticleFiltered(obj, idTime){
                             tags                    : tags,
                             text1                   : idTime + '-' + text1,
                             text2                   : idTime + '-' + text2,
-                            imageName1              : idTime + '-' + imageName1,
-                            imageName2              : idTime + '-' + imageName2,
+                            imageName1              : idTimeImg1 + imageName1,
+                            imageName2              : idTimeImg2 + imageName2,
                             creationDate            : current().today,
                             creationTime            : current().time,
                             reference               : reference,
