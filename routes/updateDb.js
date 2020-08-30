@@ -25,7 +25,7 @@ module.exports = function(app){
     });
 
     /*****************************************************/
-    /****************** Multi Upload Test ****************/
+    /**************** Add new article data ***************/
     /*****************************************************/
     let idTimePic;
     app.post('/addArticleData', async (req, res)=>{
