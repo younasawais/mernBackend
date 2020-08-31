@@ -8,7 +8,7 @@ if(typeof process.env.PORT === 'undefined'){
 }else{
    require('dotenv').config({path:'./env.production'});
 };
-require('./routes/updateDb')(app);
+require('./routes/updateDbRoute')(app);
 require('./routes/infoRoute')(app);
 require('./routes/deleteRoute')(app);
 
