@@ -36,10 +36,11 @@ module.exports = function(app){
         logToConsole('articleInfo', articleInfo);
         logToConsole('articleInfo.menu', articleInfo.menu);
         const menuItems = await AddArticleModel
-            .find({'menu' : articleInfo.menu});
+            .find({'menu' : articleInfo.menu})
+            .select({'linkId' : 1, 'menuItemName': 1, 'parentItem' : 1, '_id': 0});
         logToConsole('menuItems', menuItems);
         const articleMenuItems = generateArticleMenuItems(menuItems);
-        res.status(200).send({'articleInfo' : articleInfo, 'menuItems' : menuItems });
+        res.status(200).send({'articleInfo' : articleInfo, 'articleMenuItems' : articleMenuItems });
     });
 
     /*****************************************************/
@@ -53,28 +54,61 @@ module.exports = function(app){
 }
 
 function generateArticleMenuItems(menuItems){
+    logToConsole('menuItems', menuItems);
+    // let parentItems     = [];
+    let subItems        = [];
+    let menuItemSorted  = [];
+    for(let i = 0; menuItems.length > i; i++ ){
+        if(menuItems[i].parentItem === ''){
+            menuItemSorted.push({
+                name : menuItems[i].menuItemName,
+                router : menuItems[i].linkId,
+                sub : []
+            });
+        }else{
+            subItems.push({
+                name : menuItems[i].menuItemName,
+                router : menuItems[i].linkId,
+                parent: menuItems[i].parentItem
+            });
+        }
+    }
+
+    logToConsole('subItems', subItems);
+    logToConsole('menuItemSorted', menuItemSorted);
+
+    for (let j = 0; j < menuItemSorted.length; j++) {
+        for (let x = 0; x < subItems.length; x++) {
+            if(subItems[x].parent === menuItemSorted[j].router){
+                menuItemSorted[j].sub.push(subItems[x]);
+            }
+        }
+    }
+    
+    logToConsole('menuItemSorted', menuItemSorted);
+    return menuItemSorted;
  // return structure as below
 }
 
 const articleMenuItems =  [{
-    name: 'First one',
+    menuItemName: 'First one',
     router : 'first-one',
     sub: [{
-        name: 'Second one',
+        menuItemName: 'Second one',
         router : 'second-one'
     },{
-        name: 'Sub Second two',
+        menuItemName: 'Sub Second two',
         router : 'sub-second-two'
     }]
   },{
-    name: 'First Two',
+    menuItemName: 'First Two',
     router : 'first2',
     sub: []
   },{
-    name: 'Awais Younas',
+    menuItemName: 'Awais Younas',
     router : 'awais-younas',
     sub: [{
-        name: 'Mohammad Younas',
+        menuItemName: 'Mohammad Younas',
         router : 'Mohammad-younas'
     }]
 }]
