@@ -1,8 +1,7 @@
 const {AddArticleModel, AddMenuModel}      = require('../mongoWorks');
-//const {addArticleFiltered, addArticleEmptyParent, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
 const multer        = require('multer');
 const Cryptr        = require('cryptr');
-const { logToConsole } = require('./generalFunctions');
+const { logToConsole, tagsStringToArray } = require('./generalFunctions');
 const cryptr        = new Cryptr('maryam123!');
 
 module.exports = function(app){
@@ -32,9 +31,11 @@ module.exports = function(app){
         const {linkId} = req.body;
         const articleInfo   = await AddArticleModel
             .findOne({'linkId' : linkId})
-            .select({title: 1, tags: 1, text1: 1, text2: 1, refernce: 1, active: 1, menu: 1});
+            .select({title: 1, title2: 1, tags: 1, text1: 1, text2: 1, reference: 1, active: 1, menu: 1});
         logToConsole('articleInfo', articleInfo);
-        logToConsole('articleInfo.menu', articleInfo.menu);
+        logToConsole('articleInfo.tags', articleInfo.tags);
+        articleInfo.tags = tagsStringToArray(articleInfo.tags);
+        console.log('articleInfo.tags array', articleInfo.tags);
         const menuItems = await AddArticleModel
             .find({'menu' : articleInfo.menu})
             .select({'linkId' : 1, 'menuItemName': 1, 'parentItem' : 1, '_id': 0});

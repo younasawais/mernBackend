@@ -127,10 +127,12 @@ function logToConsole(comment, value){
 /*****************************************************/
 /***************** Tags String -> Array **************/
 /*****************************************************/
-tagsStringToArrat(stringTags){
-    
+function tagsStringToArray(stringTags){
+    let arrayTags = stringTags.split(';');
+    return arrayTags;
 }
 
+exports.tagsStringToArray       = tagsStringToArray;
 exports.current                 = current;
 exports.addArticleFiltered      = addArticleFiltered;
 exports.addArticleEmptyParent   = addArticleEmptyParent;

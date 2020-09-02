@@ -14,6 +14,7 @@ mongoose.connect('mongodb://localhost/ads',{
 /*****************************************************/
 const addArticleSchema = new mongoose.Schema({
     title                   : String,
+    title2                  : String,
     menuItemName            : String,
     parentItem              : String,
     menu                    : String,
