@@ -124,6 +124,12 @@ function logToConsole(comment, value){
     console.log("********************************* END : " + comment + " *********************************");
 }
 
+/*****************************************************/
+/***************** Tags String -> Array **************/
+/*****************************************************/
+tagsStringToArrat(stringTags){
+    
+}
 
 exports.current                 = current;
 exports.addArticleFiltered      = addArticleFiltered;
