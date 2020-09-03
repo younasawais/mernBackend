@@ -18,6 +18,7 @@
 "articles" : [
     {
         "title"         : "Dat1 First",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 First",
         "parentItem"    : "",
         "menu"          : "Menu 1",
@@ -34,6 +35,7 @@
     },
     {
         "title"         : "Dat1 Second",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Second",
         "parentItem"    : "",
         "menu"          : "Menu 1",
@@ -50,6 +52,7 @@
     },
     {
         "title"         : "Dat1 Sub of Second",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Sub of Second",
         "parentItem"    : "200816212713-dat1-second",
         "menu"          : "Menu 1",
@@ -66,6 +69,7 @@
     },
     {
         "title"         : "Dat1 Third",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Third",
         "parentItem"    : "",
         "menu"          : "Menu 1",
@@ -82,6 +86,7 @@
     },
     {
         "title"         : "Dat1 Sub of Third",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Sub of Third",
         "parentItem"    : "200816215513-dat1-third",
         "menu"          : "Menu 1",
@@ -98,6 +103,7 @@
     },
     {
         "title"         : "Dat1 Sub of Third2",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Sub of Third2",
         "parentItem"    : "200816215513-dat1-third",
         "menu"          : "Menu 1",
@@ -114,6 +120,7 @@
     },
     {
         "title"         : "Dat1 Sub of Third3",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Sub of Third3",
         "parentItem"    : "200816215513-dat1-third",
         "menu"          : "Menu 1",
@@ -130,6 +137,7 @@
     },
     {
         "title"         : "Dat1 Fourth",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Fourth",
         "parentItem"    : "",
         "menu"          : "Menu 1",
@@ -146,6 +154,7 @@
     },
     {
         "title"         : "Dat1 Sub of fourth",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Sub of fourth",
         "parentItem"    : "200816232713-dat1-fourth",
         "menu"          : "Menu 1",
@@ -162,6 +171,7 @@
     },
     {
         "title"         : "Dat1 Sub of fourth2",
+        "title2"        : "Datx X title2 details",
         "menuItemName"  : "Dat1 Sub of fourth2",
         "parentItem"    : "200816232713-dat1-fourth",
         "menu"          : "Menu 1",

@@ -45,6 +45,7 @@ function addArticleFiltered(obj, idTime){
     if(imageName2 === ""){idTimeImg2 = ""};
 
     let newAddArticle = {   title                   : title,
+                            title2                  : title2,
                             menuItemName            : menuItemName,
                             parentItem              : parent,
                             menu                    : menu,
@@ -74,6 +75,7 @@ function addArticleEmptyParent(obj, idTime){
     // else if(addSubItemToParent){parent = parentItemSelected}else{parent = parentItemSelected};
 
     let newAddParent = {    title                   : createParent,
+                            title2                  : '',
                             parentItem              : '',
                             menu                    : menu,
                             menuItemName            : createParent,

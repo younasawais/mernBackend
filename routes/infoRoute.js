@@ -27,6 +27,28 @@ module.exports = function(app){
     /*****************************************************/
     /**************** Get Article content ****************/
     /*****************************************************/
+    app.post('/getarticleinfowithMenuItems', async (req, res)=>{
+        const {linkId} = req.body;
+        logToConsole(linkId);
+        const articleInfo   = await AddArticleModel
+            .findOne({'linkId' : linkId})
+            .select({title: 1, title2: 1, tags: 1, text1: 1, text2: 1, reference: 1, active: 1, menu: 1});
+        // logToConsole('articleInfo', articleInfo);
+        // logToConsole('articleInfo.tags', articleInfo.tags);
+        articleInfo.tags = tagsStringToArray(articleInfo.tags);
+        console.log('articleInfo.tags array', articleInfo.tags);
+        const menuItems = await AddArticleModel
+            .find({'menu' : articleInfo.menu})
+            .select({'linkId' : 1, 'menuItemName': 1, 'parentItem' : 1, '_id': 0});
+        logToConsole('menuItems', menuItems);
+        const articleMenuItems = generateArticleMenuItems(menuItems);
+        logToConsole('final articleInfo', articleInfo);
+        res.status(200).send({'articleInfo' : articleInfo, 'articleMenuItems' : articleMenuItems });
+    });
+
+    /*****************************************************/
+    /********** Get Article content without menu *********/
+    /*****************************************************/
     app.post('/getarticleinfo', async (req, res)=>{
         const {linkId} = req.body;
         const articleInfo   = await AddArticleModel
@@ -36,12 +58,7 @@ module.exports = function(app){
         logToConsole('articleInfo.tags', articleInfo.tags);
         articleInfo.tags = tagsStringToArray(articleInfo.tags);
         console.log('articleInfo.tags array', articleInfo.tags);
-        const menuItems = await AddArticleModel
-            .find({'menu' : articleInfo.menu})
-            .select({'linkId' : 1, 'menuItemName': 1, 'parentItem' : 1, '_id': 0});
-        logToConsole('menuItems', menuItems);
-        const articleMenuItems = generateArticleMenuItems(menuItems);
-        res.status(200).send({'articleInfo' : articleInfo, 'articleMenuItems' : articleMenuItems });
+        res.status(200).send({'articleInfo' : articleInfo });
     });
 
     /*****************************************************/
@@ -54,6 +71,9 @@ module.exports = function(app){
     });
 }
 
+
+
+/**********************General functions ******************/
 function generateArticleMenuItems(menuItems){
     logToConsole('menuItems', menuItems);
     // let parentItems     = [];

@@ -34,9 +34,11 @@ module.exports = function(app){
         let resultaddParent = null;
         let resultAddMenu = null;
         upload(req,res, async function(err){
+
             /************* Add Article in DB ****************/
             const resultaddArticle = await addArticle(addArticleFiltered(req.body, idTime));
             //logToConsole('resultaddArticle general',resultaddArticle);
+
             /************* Add Parent in DB ****************/
             if(req.body.checkBoxCreateParent !== 'false'){
                 resultaddParent = await addArticle(addArticleEmptyParent(req.body, idTime));
@@ -44,6 +46,7 @@ module.exports = function(app){
             if(req.body.checkBoxCreateMenu !== 'false'){
                 resultAddMenu = await addMenu(addNewMenu(req.body, idTime))
                 logToConsole('resultAddMenu createMenu true',resultAddMenu); }
+
             /************* Reply to client ****************/
             if(err){res.status(500).send(err);}else {res.status(200).send({
                 'resultaddArticle'  : resultaddArticle,
@@ -53,13 +56,14 @@ module.exports = function(app){
         })
     });
     
+    
+    /************* Save attachments ****************/
     const storage = multer.diskStorage({
         destination : './fileUpload/',
         filename : function(req, file, cb){
             cb(null,idTimePic + '-' + file.originalname)
         }
-    });
-    
+    });    
     let upload = multer({ storage : storage }).array('file');   
 
     /*****************************************************/
