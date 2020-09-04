@@ -20,7 +20,6 @@ module.exports = function(app){
             const parentArticles   = await AddArticleModel
                 .find({'parentItem' : ''})
                 .select({title: 1, linkId: 1, menu: 1});
-            //logToConsole('parentArticles', parentArticles);
             res.status(200).send({'menus': menus,'parentArticles' : parentArticles});
         });
 
@@ -29,20 +28,19 @@ module.exports = function(app){
     /*****************************************************/
     app.post('/getarticleinfowithMenuItems', async (req, res)=>{
         const {linkId} = req.body;
-        logToConsole(linkId);
         const articleInfo   = await AddArticleModel
             .findOne({'linkId' : linkId})
-            .select({title: 1, title2: 1, tags: 1, text1: 1, text2: 1, reference: 1, active: 1, menu: 1});
-        // logToConsole('articleInfo', articleInfo);
-        // logToConsole('articleInfo.tags', articleInfo.tags);
+            .select({
+                _id : 0,
+                __v : 0,
+                creationDate : 0,
+                creationTime : 0
+            });
         articleInfo.tags = tagsStringToArray(articleInfo.tags);
-        console.log('articleInfo.tags array', articleInfo.tags);
         const menuItems = await AddArticleModel
             .find({'menu' : articleInfo.menu})
             .select({'linkId' : 1, 'menuItemName': 1, 'parentItem' : 1, '_id': 0});
-        logToConsole('menuItems', menuItems);
         const articleMenuItems = generateArticleMenuItems(menuItems);
-        logToConsole('final articleInfo', articleInfo);
         res.status(200).send({'articleInfo' : articleInfo, 'articleMenuItems' : articleMenuItems });
     });
 
@@ -53,11 +51,8 @@ module.exports = function(app){
         const {linkId} = req.body;
         const articleInfo   = await AddArticleModel
             .findOne({'linkId' : linkId})
-            .select({title: 1, title2: 1, tags: 1, text1: 1, text2: 1, reference: 1, active: 1, menu: 1});
-        logToConsole('articleInfo', articleInfo);
-        logToConsole('articleInfo.tags', articleInfo.tags);
+            .select({title: 1, title2: 1, tags: 1, text1: 1, text2: 1, reference: 1, active: 1, menu: 1} -'_id' -'__v');
         articleInfo.tags = tagsStringToArray(articleInfo.tags);
-        console.log('articleInfo.tags array', articleInfo.tags);
         res.status(200).send({'articleInfo' : articleInfo });
     });
 
@@ -66,17 +61,13 @@ module.exports = function(app){
     /*****************************************************/
     app.post('/getArticleListManageArticles', async(req,res)=>{
         const articles   = await AddArticleModel.find();
-        //console.log(articles);
         res.send(articles);
     });
 }
 
 
-
 /**********************General functions ******************/
 function generateArticleMenuItems(menuItems){
-    logToConsole('menuItems', menuItems);
-    // let parentItems     = [];
     let subItems        = [];
     let menuItemSorted  = [];
     for(let i = 0; menuItems.length > i; i++ ){
@@ -95,9 +86,6 @@ function generateArticleMenuItems(menuItems){
         }
     }
 
-    logToConsole('subItems', subItems);
-    logToConsole('menuItemSorted', menuItemSorted);
-
     for (let j = 0; j < menuItemSorted.length; j++) {
         for (let x = 0; x < subItems.length; x++) {
             if(subItems[x].parent === menuItemSorted[j].router){
@@ -106,30 +94,5 @@ function generateArticleMenuItems(menuItems){
         }
     }
     
-    logToConsole('menuItemSorted', menuItemSorted);
     return menuItemSorted;
- // return structure as below
 }
-
-const articleMenuItems =  [{
-    menuItemName: 'First one',
-    router : 'first-one',
-    sub: [{
-        menuItemName: 'Second one',
-        router : 'second-one'
-    },{
-        menuItemName: 'Sub Second two',
-        router : 'sub-second-two'
-    }]
-  },{
-    menuItemName: 'First Two',
-    router : 'first2',
-    sub: []
-  },{
-    menuItemName: 'Awais Younas',
-    router : 'awais-younas',
-    sub: [{
-        menuItemName: 'Mohammad Younas',
-        router : 'Mohammad-younas'
-    }]
-}]

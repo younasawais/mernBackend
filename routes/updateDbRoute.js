@@ -37,7 +37,7 @@ module.exports = function(app){
 
             /************* Add Article in DB ****************/
             const resultaddArticle = await addArticle(addArticleFiltered(req.body, idTime));
-            //logToConsole('resultaddArticle general',resultaddArticle);
+            logToConsole('resultaddArticle general',resultaddArticle);
 
             /************* Add Parent in DB ****************/
             if(req.body.checkBoxCreateParent !== 'false'){
@@ -61,7 +61,7 @@ module.exports = function(app){
     const storage = multer.diskStorage({
         destination : './fileUpload/',
         filename : function(req, file, cb){
-            cb(null,idTimePic + '-' + file.originalname)
+            cb(null, idTimePic + '-' + file.originalname)
         }
     });    
     let upload = multer({ storage : storage }).array('file');   

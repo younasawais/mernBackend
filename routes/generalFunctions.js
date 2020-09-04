@@ -28,7 +28,7 @@ function textToLink(name){
 /***************** add new Article *******************/
 /*****************************************************/
 function addArticleFiltered(obj, idTime){
-    const { title, menuItemName, newMenu, parentItemSelectedId, selectedMenu, 
+    const { title, title2, menuItemName, newMenu, parentItemSelectedId, selectedMenu, 
         createParent, tags, text1, text2, reference, active, 
         checkBoxCreateMenu,  checkBoxCreateParent, 
         imageName1, imageName2} = obj;
@@ -51,8 +51,8 @@ function addArticleFiltered(obj, idTime){
                             menu                    : menu,
                             linkId                  : idTime + '-' + textToLink(title),
                             tags                    : tags,
-                            text1                   : idTime + '-' + text1,
-                            text2                   : idTime + '-' + text2,
+                            text1                   : text1,
+                            text2                   : text2,
                             imageName1              : idTimeImg1 + imageName1,
                             imageName2              : idTimeImg2 + imageName2,
                             creationDate            : current().today,
