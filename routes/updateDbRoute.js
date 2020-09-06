@@ -1,5 +1,6 @@
 const {addArticle, addMenu, AddArticleModel}      = require('../mongoWorks');
-const {addArticleFiltered, addArticleEmptyParent, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
+const {addArticleFiltered, addArticleEmptyParent, getParentAndChildren, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
+
 const { AddMenuModel } = require("../mongoWorks");
 const multer = require('multer');
 
@@ -19,7 +20,7 @@ module.exports = function(app){
             //resultAddMenu = await AddMenuModel(menus[j]);
             const menu = new AddMenuModel(menus[j]);
             const resultMenu = await menu.save();
-            logToConsole('result:' + j, resultMenu);
+            //logToConsole('result:' + j, resultMenu);
         }
         res.status(200).send(req.body);
     });
@@ -81,5 +82,25 @@ module.exports = function(app){
         const articles   = await AddArticleModel.find();
         
         res.send(articles);
+    });
+    
+    /*****************************************************/
+    /******* (de)activate & Get updated menus list *******/
+    /*****************************************************/
+    app.post('/publishMenusgetUpdatedList', async(req,res)=>{
+        const {publishIds, active}     = req.body;
+        let response = null;
+        for (let i = 0; i < publishIds.length; i++) {
+            response  = await AddMenuModel.findOneAndUpdate({'id' : publishIds[i].id}, {'active' : active});
+            console.log(response);
+        }
+        let menus   = await AddMenuModel
+        .find()
+        .select({
+            '_id' : 0,
+            '__v' : 0
+        });
+        let parentsAndChildren = getParentAndChildren(menus);
+        res.send({menus: menus, children : (await parentsAndChildren).children, parents : (await parentsAndChildren).parents});
     });
 }

@@ -1,7 +1,7 @@
 const {AddArticleModel, AddMenuModel}      = require('../mongoWorks');
 const multer        = require('multer');
 const Cryptr        = require('cryptr');
-const { logToConsole, tagsStringToArray } = require('./generalFunctions');
+const { logToConsole, tagsStringToArray, getParentAndChildren } = require('./generalFunctions');
 const cryptr        = new Cryptr('maryam123!');
 
 module.exports = function(app){
@@ -65,7 +65,7 @@ module.exports = function(app){
     });
 
     /*****************************************************/
-    /****************** Get Menu list ****************/
+    /********************* Get Menu list *****************/
     /*****************************************************/
     app.post('/getMenuList', async(req,res)=>{
         let menus   = await AddMenuModel
@@ -82,17 +82,6 @@ module.exports = function(app){
 
 
 /**********************General functions ******************/
-async function getParentAndChildren(menus){
-    let newMenus = {...menus};
-    parents    = [];
-    children   = [];
-    for(let i = 0 ; i < menus.length ; i++){
-        parents[i]    = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : ""}).select({title:1})).length;
-        children[i]   = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : /^[0-9]{12}.+/ }).select({title:1})).length;
-    }
-    return {'parents': parents, 'children': children};
-}
-
 function generateArticleMenuItems(menuItems){
     let subItems        = [];
     let menuItemSorted  = [];

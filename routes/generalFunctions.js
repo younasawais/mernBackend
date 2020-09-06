@@ -1,4 +1,4 @@
-const { AddArticle } = require("../mongoWorks");
+const {AddArticleModel, AddArticle } = require("../mongoWorks");
 /************* Random functions ****************/
 
 /*****************************************************/
@@ -134,9 +134,24 @@ function tagsStringToArray(stringTags){
     return arrayTags;
 }
 
+/*****************************************************/
+/******* Get total parents & children articles *******/
+/*****************************************************/
+async function getParentAndChildren(menus){
+    let newMenus = {...menus};
+    parents    = [];
+    children   = [];
+    for(let i = 0 ; i < menus.length ; i++){
+        parents[i]    = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : ""}).select({title:1})).length;
+        children[i]   = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : /^[0-9]{12}.+/ }).select({title:1})).length;
+    }
+    return {'parents': parents, 'children': children};
+}
+
 exports.tagsStringToArray       = tagsStringToArray;
 exports.current                 = current;
 exports.addArticleFiltered      = addArticleFiltered;
 exports.addArticleEmptyParent   = addArticleEmptyParent;
 exports.addNewMenu              = addNewMenu;
 exports.logToConsole            = logToConsole;
+exports.getParentAndChildren    = getParentAndChildren;
