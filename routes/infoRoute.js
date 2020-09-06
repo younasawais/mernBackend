@@ -63,10 +63,36 @@ module.exports = function(app){
         const articles   = await AddArticleModel.find();
         res.send(articles);
     });
+
+    /*****************************************************/
+    /****************** Get Menu list ****************/
+    /*****************************************************/
+    app.post('/getMenuList', async(req,res)=>{
+        let menus   = await AddMenuModel
+        .find()
+        .select({
+            '_id' : 0,
+            '__v' : 0
+        });
+        let parentsAndChildren = getParentAndChildren(menus);
+        //logToConsole('parentsAndChildren', parentsAndChildren);
+        res.send({menus: menus, children : (await parentsAndChildren).children, parents : (await parentsAndChildren).parents});
+    });
 }
 
 
 /**********************General functions ******************/
+async function getParentAndChildren(menus){
+    let newMenus = {...menus};
+    parents    = [];
+    children   = [];
+    for(let i = 0 ; i < menus.length ; i++){
+        parents[i]    = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : ""}).select({title:1})).length;
+        children[i]   = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : /^[0-9]{12}.+/ }).select({title:1})).length;
+    }
+    return {'parents': parents, 'children': children};
+}
+
 function generateArticleMenuItems(menuItems){
     let subItems        = [];
     let menuItemSorted  = [];
@@ -93,6 +119,5 @@ function generateArticleMenuItems(menuItems){
             }
         }
     }
-    
     return menuItemSorted;
 }
