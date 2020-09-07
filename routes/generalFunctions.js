@@ -1,5 +1,24 @@
 const {AddArticleModel, AddArticle } = require("../mongoWorks");
+const bcrypt = require('bcrypt');
+const Cryptr = require('cryptr');
+//const cryptr = new Cryptr(process.env.jwtKey);
+const cryptr = new Cryptr('personalKey');
+
 /************* Random functions ****************/
+
+/*****************************************************/
+/******************** (de)Encrypt ********************/
+/*****************************************************/
+function encryption(val){
+    return cryptr.encrypt(val)
+};
+function decryption(val){
+    return cryptr.decrypt(val)
+};
+
+exports.encryption = encryption;
+exports.decryption = decryption;
+
 
 /*****************************************************/
 /******************** Current time *******************/
@@ -147,6 +166,19 @@ async function getParentAndChildren(menus){
     }
     return {'parents': parents, 'children': children};
 }
+
+
+
+/*****************************************************/
+/************************ BCrypt *********************/
+/*****************************************************/
+async function encrypt(value){
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(value, salt);
+    return hashed;
+};
+
+
 
 exports.tagsStringToArray       = tagsStringToArray;
 exports.current                 = current;
