@@ -78,8 +78,30 @@ module.exports = function(app){
         //logToConsole('parentsAndChildren', parentsAndChildren);
         res.send({menus: menus, children : (await parentsAndChildren).children, parents : (await parentsAndChildren).parents});
     });
-}
+    
+    /*****************************************************/
+    /********************* Get Menu list *****************/
+    /*****************************************************/
+    app.post('/getmenunamesandlinks', async(req,res)=>{
+        let menus   = await AddMenuModel
+        .find()
+        .select({
+            '_id' : 0,
+            '__v' : 0,
+            'creationDate'  : 0,
+            'creationTime'  : 0,
+        });
 
+        let menuLinks = [];
+        for (let i = 0; i < menus.length; i++) {    
+            menuLinks[i] = await AddArticleModel
+            .findOne({menu : menus[i].name })
+            .select({title: 1, linkId : 1});
+        }
+        res.send({menus: menus, menuLinks : menuLinks});
+    });
+
+}
 
 /**********************General functions ******************/
 function generateArticleMenuItems(menuItems){

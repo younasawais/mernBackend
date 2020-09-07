@@ -35,7 +35,7 @@ module.exports = function(app){
             //logToConsole("domainName: ", domainName);
             whois.lookup(domainName, async function(err, data){
                 const response = await data;
-                logToConsole("response: ", response);
+                //logToConsole("response: ", response);
                 let domainNameAvailable;
                 if(response.includes("No match for domain") || response.includes("Not found: " + domainName)){
                     domainNameAvailable = "available"
@@ -56,7 +56,7 @@ module.exports = function(app){
             /********** CODE START *********/
             const verify  = checkToken(req.body.token) //Check token
             const dbres   = await UserModel.findOne({"userInfo.email" : verify.email}); // get data from db
-            logToConsole("userInfo", dbres);
+            //logToConsole("userInfo", dbres);
             const {name, surname, email, phoneNumber, address, address2, city, 
                 state,country, zip, registrationDate} = dbres.userInfo;
             let sendObj = {

@@ -38,15 +38,15 @@ module.exports = function(app){
 
             /************* Add Article in DB ****************/
             const resultaddArticle = await addArticle(addArticleFiltered(req.body, idTime));
-            logToConsole('resultaddArticle general',resultaddArticle);
+            //logToConsole('resultaddArticle general',resultaddArticle);
 
             /************* Add Parent in DB ****************/
             if(req.body.checkBoxCreateParent !== 'false'){
                 resultaddParent = await addArticle(addArticleEmptyParent(req.body, idTime));
-                logToConsole('resulAddParent createParent true',resultaddParent)}
+                //logToConsole('resulAddParent createParent true',resultaddParent)}
             if(req.body.checkBoxCreateMenu !== 'false'){
                 resultAddMenu = await addMenu(addNewMenu(req.body, idTime))
-                logToConsole('resultAddMenu createMenu true',resultAddMenu); }
+                //logToConsole('resultAddMenu createMenu true',resultAddMenu); }
 
             /************* Reply to client ****************/
             if(err){res.status(500).send(err);}else {res.status(200).send({
@@ -72,8 +72,8 @@ module.exports = function(app){
     /*****************************************************/
     app.post('/publishArticlesgetUpdatedList', async(req,res)=>{
         const {publishIds, active}     = req.body;
-        logToConsole('publishIds', publishIds);
-        logToConsole('active', active);
+        //logToConsole('publishIds', publishIds);
+        //logToConsole('active', active);
         let response = null;
         for (let i = 0; i < publishIds.length; i++) {
             response  = await AddArticleModel.findOneAndUpdate({'linkId' : publishIds[i].id}, {'active' : active});
