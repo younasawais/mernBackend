@@ -1,15 +1,25 @@
-const {AddArticleModel, AddMenuModel}      = require('../mongoWorks');
+const {AddArticleModel, AddMenuModel, settingsModel}      = require('../mongoWorks');
 const multer        = require('multer');
-const Cryptr        = require('cryptr');
-const { logToConsole, tagsStringToArray, getParentAndChildren } = require('./generalFunctions');
-const cryptr        = new Cryptr('maryam123!');
+const { logToConsole, tagsStringToArray, getParentAndChildren, decryption } = require('./generalFunctions');
+const jwt           = require('jsonwebtoken');
 
 module.exports = function(app){
     /*****************************************************/
     /*********************** Home ************************/
     /*****************************************************/
-    app.post('/encode', (req,res)=>{
-        res.send(cryptr.encrypt('475734255Bb'));
+    app.post('/loginAdmin', async (req,res)=>{
+        const {email, password} = req.body;
+        const response = await settingsModel.findOne({'adminEmail' : email});
+        let token = null;
+        if(decryption(response.adminPassword) === password){
+            //console.log('successfull credentials checks!');
+            token = jwt.sign({'username' : email}, process.env.jwtKey)
+            res.send(token);
+        }else{
+            //console.log('Wrong password');
+            res.send('Wrong password');
+        }
+        
     });
         
     /*****************************************************/

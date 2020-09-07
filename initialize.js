@@ -1,6 +1,6 @@
 const { settings, settingsModel } = require('./mongoWorks');
 const { logToConsole, encryption, decryption } = require('./routes/generalFunctions');
-const jwt = require('jsonwebtoken');
+
 
 async function initializeLogin(){
     response  = await settingsModel.findOne();
@@ -13,4 +13,6 @@ async function initializeLogin(){
         return false;
     }
 }
+
+
 initializeLogin();
