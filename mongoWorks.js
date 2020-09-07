@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { logToConsole } = require('./routes/generalFunctions');
 //const {logToConsole} = require('./generalFunctions.js');
 
 mongoose.connect('mongodb://localhost/ads',{
@@ -63,23 +64,35 @@ async function addMenu(addMenuModel){
 
 exports.addMenu       = addMenu;
 exports.AddMenuModel  = AddMenuModel ;
+
+
+/*****************************************************/
+/********************* Settings **********************/
+/*****************************************************/
+const settingsSchema = new mongoose.Schema({
+    adminEmail              : String,
+    adminPassword           : String,
+ })
+const settingsModel = mongoose.model('settings', settingsSchema);
+
+async function settings(input){
+    const settings = new settingsModel(input);
+    const result = await settings.save();
+    return result;
+}
+
+exports.settings      = settings;
+exports.settingsModel = settingsModel;
+
+
+
+
+
+
+
+
 /*****************************************************/
 /***************** User Collection *******************/
 /*****************************************************/
 // TODO
 
-/*****************************************************/
-/***************** Sample articles *******************/
-/*****************************************************/
-
-// const addSampleArticlesSchema = new mongoose.Schema([]);
-
-// const AddSampleArticles = mongoose.model('Article', addSampleArticlesSchema);
-
-
-// async function addSampleArticles(addSampleArticles){
-//     const sampleArticles = new AddSampleArticles(addSampleArticles);
-//     const result = await sampleArticles.save();
-//     return result;
-// }
-//exports.addSampleArticles   = addSampleArticles;

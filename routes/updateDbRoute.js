@@ -43,10 +43,12 @@ module.exports = function(app){
             /************* Add Parent in DB ****************/
             if(req.body.checkBoxCreateParent !== 'false'){
                 resultaddParent = await addArticle(addArticleEmptyParent(req.body, idTime));
-                //logToConsole('resulAddParent createParent true',resultaddParent)}
+                //logToConsole('resulAddParent createParent true',resultaddParent)
+            }
             if(req.body.checkBoxCreateMenu !== 'false'){
                 resultAddMenu = await addMenu(addNewMenu(req.body, idTime))
-                //logToConsole('resultAddMenu createMenu true',resultAddMenu); }
+                //logToConsole('resultAddMenu createMenu true',resultAddMenu); 
+            }
 
             /************* Reply to client ****************/
             if(err){res.status(500).send(err);}else {res.status(200).send({
