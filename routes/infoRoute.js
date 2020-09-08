@@ -1,6 +1,6 @@
 const {AddArticleModel, AddMenuModel, settingsModel}      = require('../mongoWorks');
 const multer        = require('multer');
-const { logToConsole, tagsStringToArray, getParentAndChildren, decryption } = require('./generalFunctions');
+const { logToConsole, tagsStringToArray, getParentAndChildren, decryption, checkToken } = require('./generalFunctions');
 const jwt           = require('jsonwebtoken');
 
 module.exports = function(app){
@@ -11,19 +11,26 @@ module.exports = function(app){
         const {email, password} = req.body;
         const response = await settingsModel.findOne({'adminEmail' : email});
         let token = null;
-        logToConsole('email', email);
         logToConsole('response', response);
         try {
             if(decryption(response.adminPassword) === password){
                 //console.log('successfull credentials checks!');
-                token = jwt.sign({'username' : email}, process.env.jwtKey)
+                token = jwt.sign({'adminEmail' : email, 'adminPassword': response.adminPassword }, process.env.jwtKey)
                 res.status(200).send(token);
             }
         } catch (error) {
             res.status(204).send('Wrong password');
         }        
     });
-        
+    
+    /*****************************************************/
+    /******************* Check token *********************/
+    /*****************************************************/
+    app.post('/checkToken', async (req,res)=>{
+        const {token} = req.body;
+        res.send({token : await checkToken(token)});
+    });
+
     /*****************************************************/
     /********************** Add menu data ****************/
     /*****************************************************/

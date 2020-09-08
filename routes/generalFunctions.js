@@ -1,10 +1,36 @@
-const {AddArticleModel, AddArticle } = require("../mongoWorks");
+const {AddArticleModel, AddArticle, settingsModel} = require("../mongoWorks");
 const bcrypt = require('bcrypt');
 const Cryptr = require('cryptr');
 //const cryptr = new Cryptr(process.env.jwtKey);
 const cryptr = new Cryptr('personalKey');
+const jwt           = require('jsonwebtoken');
 
 /************* Random functions ****************/
+
+/*****************************************************/
+/******************** (de)Encrypt ********************/
+/*****************************************************/
+async function checkToken(reqToken){
+    try {
+        const token = reqToken;
+        const verify = jwt.verify(token,process.env.jwtKey);
+        //logToConsole("verify",verify);
+        const {adminPassword, adminEmail} = verify;
+        const response = await settingsModel.findOne({'adminEmail' : adminEmail});
+        logToConsole('response.adminPassword', response.adminPassword);
+        logToConsole('adminPassword', adminPassword);
+    
+        if(response.adminPassword === adminPassword){
+            return true;  
+        }else{
+            return false;
+        }
+    } catch (error) {
+        return false
+    }
+}
+
+exports.checkToken = checkToken;
 
 /*****************************************************/
 /******************** (de)Encrypt ********************/
