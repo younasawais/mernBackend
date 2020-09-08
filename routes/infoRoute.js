@@ -11,15 +11,17 @@ module.exports = function(app){
         const {email, password} = req.body;
         const response = await settingsModel.findOne({'adminEmail' : email});
         let token = null;
-        if(decryption(response.adminPassword) === password){
-            //console.log('successfull credentials checks!');
-            token = jwt.sign({'username' : email}, process.env.jwtKey)
-            res.send(token);
-        }else{
-            //console.log('Wrong password');
-            res.send('Wrong password');
-        }
-        
+        logToConsole('email', email);
+        logToConsole('response', response);
+        try {
+            if(decryption(response.adminPassword) === password){
+                //console.log('successfull credentials checks!');
+                token = jwt.sign({'username' : email}, process.env.jwtKey)
+                res.status(200).send(token);
+            }
+        } catch (error) {
+            res.status(204).send('Wrong password');
+        }        
     });
         
     /*****************************************************/
