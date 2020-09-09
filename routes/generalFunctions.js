@@ -14,12 +14,8 @@ async function checkToken(reqToken){
     try {
         const token = reqToken;
         const verify = jwt.verify(token,process.env.jwtKey);
-        //logToConsole("verify",verify);
         const {adminPassword, adminEmail} = verify;
-        const response = await settingsModel.findOne({'adminEmail' : adminEmail});
-        logToConsole('response.adminPassword', response.adminPassword);
-        logToConsole('adminPassword', adminPassword);
-    
+        const response = await settingsModel.findOne({'adminEmail' : adminEmail});    
         if(response.adminPassword === adminPassword){
             return true;  
         }else{

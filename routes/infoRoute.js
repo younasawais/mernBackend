@@ -14,12 +14,13 @@ module.exports = function(app){
         logToConsole('response', response);
         try {
             if(decryption(response.adminPassword) === password){
-                //console.log('successfull credentials checks!');
                 token = jwt.sign({'adminEmail' : email, 'adminPassword': response.adminPassword }, process.env.jwtKey)
                 res.status(200).send(token);
+            }else{
+                logToConsole('else works');
             }
         } catch (error) {
-            res.status(204).send('Wrong password');
+            logToConsole('error works');
         }        
     });
     
