@@ -20,6 +20,6 @@ require('./routes/updateDbRoute')(app);
 require('./routes/infoRoute')(app);
 require('./routes/deleteRoute')(app);
 
-app.listen(4000, ()=>{
-   console.log('listening on Port 4000');
+app.listen(process.env.PORT, ()=>{
+   console.log('listening on Port ' + process.env.PORT);
 });
