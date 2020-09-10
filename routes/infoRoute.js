@@ -9,9 +9,10 @@ module.exports = function(app){
     /*****************************************************/
     app.post('/loginAdmin', async (req,res)=>{
         const {email, password} = req.body;
+        logToConsole('req.body', req.body);
         const response = await settingsModel.findOne({'adminEmail' : email});
         let token = null;
-        //logToConsole('response', response);
+        logToConsole('response', response);
         let dbPassword = decryption(response.adminPassword);
         //logToConsole('dbPassword', dbPassword);
         try {
@@ -27,7 +28,7 @@ module.exports = function(app){
         } catch (error) {
             //logToConsole('error login', error);
             res.status(200).send({login: false});
-        }        
+        }       
     });
     
     /*****************************************************/
