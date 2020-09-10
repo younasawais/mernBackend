@@ -1,7 +1,5 @@
-jwtKey='awais123'
-db='mongodb+src://...'
-jwtKey='jwtAwais123'
 db='mongodb+srv://awais:475734255Bbm@cluster0.96fww.mongodb.net/qouh?retryWrites=true&w=majority'
-port=5000
+jwtKey='jwtAwais123'
 adminEmail='younasawais@gmail.com'
 adminPassword='awais123'
+port=5000

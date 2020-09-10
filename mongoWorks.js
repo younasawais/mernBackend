@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const { logToConsole } = require('./routes/generalFunctions');
 //const {logToConsole} = require('./generalFunctions.js');
-
-mongoose.connect('mongodb://localhost/ads',{
+console.log(process.env.db);
+mongoose.connect('mongodb+srv://awais:475734255Bbm@cluster0.96fww.mongodb.net/qouh?retryWrites=true&w=majority',{
    useNewUrlParser: true,
    useUnifiedTopology: true,
    useFindAndModify: false})

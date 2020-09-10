@@ -9,7 +9,7 @@ async function initializeLogin(){
         let settingsResponse = await settings({adminEmail:adminEmail, adminPassword: encryption(adminPassword)});
         logToConsole('initialized credentials', settingsResponse);
         return settingsResponse;
-    }else{
+    }else{        
         return false;
     }
 }
