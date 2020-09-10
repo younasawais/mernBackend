@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const { logToConsole } = require('./routes/generalFunctions');
-//const {logToConsole} = require('./generalFunctions.js');
+
 console.log(process.env.db);
-mongoose.connect('mongodb+srv://awais:475734255Bbm@cluster0.96fww.mongodb.net/qouh?retryWrites=true&w=majority',{
+mongoose.connect(process.env.db,{
    useNewUrlParser: true,
    useUnifiedTopology: true,
    useFindAndModify: false})
 .then(()=>{console.log("Connected to DB.............................................................")})
-.catch((err)=>("Can't connect to db : " + err));
+.catch((err)=>(console.log("Can't connect to db : " + err)));
 
 
 /*****************************************************/

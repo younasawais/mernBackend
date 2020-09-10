@@ -10,27 +10,6 @@ const jwt           = require('jsonwebtoken');
 /*****************************************************/
 /******************** (de)Encrypt ********************/
 /*****************************************************/
-async function checkToken(reqToken){
-    try {
-        const token = reqToken;
-        const verify = jwt.verify(token,process.env.jwtKey);
-        const {adminPassword, adminEmail} = verify;
-        const response = await settingsModel.findOne({'adminEmail' : adminEmail});    
-        if(response.adminPassword === adminPassword){
-            return true;  
-        }else{
-            return false;
-        }
-    } catch (error) {
-        return false
-    }
-}
-
-exports.checkToken = checkToken;
-
-/*****************************************************/
-/******************** (de)Encrypt ********************/
-/*****************************************************/
 function encryption(val){
     return cryptr.encrypt(val)
 };
@@ -175,21 +154,32 @@ function tagsStringToArray(stringTags){
     return arrayTags;
 }
 
-/*****************************************************/
-/******* Get total parents & children articles *******/
-/*****************************************************/
-async function getParentAndChildren(menus){
-    let newMenus = {...menus};
-    parents    = [];
-    children   = [];
-    for(let i = 0 ; i < menus.length ; i++){
-        parents[i]    = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : ""}).select({title:1})).length;
-        children[i]   = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : /^[0-9]{12}.+/ }).select({title:1})).length;
-    }
-    return {'parents': parents, 'children': children};
-}
 
 
+
+/*****************************************************/
+/******************** (de)Encrypt ********************/
+/*****************************************************/
+// async function checkToken(reqToken){
+//     try {
+//         const verify = jwt.verify(reqToken,process.env.jwtKey);
+//         const {adminPassword, adminEmail} = verify;
+//         logToConsole('adminEmail', adminEmail);
+//         const response = await settingsModel.findOne({'adminEmail' : adminEmail});
+//         // console.log(response); 
+//         // console.log(adminPassword);
+//         if(response.adminPassword === adminPassword){
+//             return true;  
+//         }else{
+//             return false;
+//         }
+//     } catch (error) {
+//         logToConsole('error token', error);
+//         return false;
+//     }
+// }
+
+//exports.checkToken = checkToken;
 
 /*****************************************************/
 /************************ BCrypt *********************/
@@ -208,4 +198,4 @@ exports.addArticleFiltered      = addArticleFiltered;
 exports.addArticleEmptyParent   = addArticleEmptyParent;
 exports.addNewMenu              = addNewMenu;
 exports.logToConsole            = logToConsole;
-exports.getParentAndChildren    = getParentAndChildren;
+//exports.getParentAndChildren    = getParentAndChildren;

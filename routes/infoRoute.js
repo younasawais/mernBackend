@@ -1,20 +1,9 @@
 const {AddArticleModel, AddMenuModel, settingsModel}      = require('../mongoWorks');
-const multer        = require('multer');
-const { logToConsole, tagsStringToArray, getParentAndChildren, decryption, checkToken } = require('./generalFunctions');
+// const multer        = require('multer');
+const { logToConsole, tagsStringToArray, decryption} = require('./generalFunctions');
 const jwt           = require('jsonwebtoken');
 
 module.exports = function(app){
-    /*****************************************************/
-    /****************** Test Communication ***************/
-    /*****************************************************/
-    // app.post('/test', async(req,res)=>{
-    //     res.send('test works');
-    // });
-
-    app.get('/', (req,res)=>{
-        res.send('walekumsalam 6');
-     });
-
     /*****************************************************/
     /*********************** Home ************************/
     /*****************************************************/
@@ -22,16 +11,22 @@ module.exports = function(app){
         const {email, password} = req.body;
         const response = await settingsModel.findOne({'adminEmail' : email});
         let token = null;
-        logToConsole('response', response);
+        //logToConsole('response', response);
+        let dbPassword = decryption(response.adminPassword);
+        //logToConsole('dbPassword', dbPassword);
         try {
-            if(decryption(response.adminPassword) === password){
-                token = jwt.sign({'adminEmail' : email, 'adminPassword': response.adminPassword }, process.env.jwtKey)
+            if(dbPassword === password){
+                token = jwt.sign({'adminEmail' : email, 'adminPassword': dbPassword }, process.env.jwtKey)
                 res.status(200).send(token);
             }else{
-                logToConsole('else works');
+                // logToConsole('Wrong login details');
+                // logToConsole('response.adminPassword', dbPassword);
+                // logToConsole('client password', password);
+                res.status(200).send({login: false});
             }
         } catch (error) {
-            logToConsole('error works');
+            //logToConsole('error login', error);
+            res.status(200).send({login: false});
         }        
     });
     
@@ -40,7 +35,21 @@ module.exports = function(app){
     /*****************************************************/
     app.post('/checkToken', async (req,res)=>{
         const {token} = req.body;
-        res.send({token : await checkToken(token)});
+        try {
+            const verify = jwt.verify(token,process.env.jwtKey);
+            const {adminPassword, adminEmail} = verify;
+            //logToConsole('adminEmail', adminEmail);
+            const response = await settingsModel.findOne({'adminEmail' : adminEmail});
+            //logToConsole ('response findOne',response);
+            if(decryption(response.adminPassword) === adminPassword){
+                res.send({ token: true});  
+            }else{
+                res.send({ token: false});  
+            }
+        } catch (error) {
+            res.send({ token: false}); 
+        }
+        //res.send({token : await checkToken(token)});
     });
 
     /*****************************************************/
@@ -132,6 +141,16 @@ module.exports = function(app){
         res.send({menus: menus, menuLinks : menuLinks});
     });
 
+    /*****************************************************/
+    /****************** Test Communication ***************/
+    /*****************************************************/
+    app.post('/testpost', async(req,res)=>{
+        res.send('test post works');
+    });
+
+    app.get('/testget', (req,res)=>{
+        res.send('test get works');
+     });
 }
 
 /**********************General functions ******************/
@@ -162,4 +181,19 @@ function generateArticleMenuItems(menuItems){
         }
     }
     return menuItemSorted;
+}
+
+
+/*****************************************************/
+/******* Get total parents & children articles *******/
+/*****************************************************/
+async function getParentAndChildren(menus){
+    let newMenus = {...menus};
+    parents    = [];
+    children   = [];
+    for(let i = 0 ; i < menus.length ; i++){
+        parents[i]    = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : ""}).select({title:1})).length;
+        children[i]   = (await AddArticleModel.find({menu : newMenus[i].name, parentItem : /^[0-9]{12}.+/ }).select({title:1})).length;
+    }
+    return {'parents': parents, 'children': children};
 }

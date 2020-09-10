@@ -9,24 +9,11 @@ app.use('/images', express.static('fileUpload'));
 
 require('dotenv').config({path:'./.env'});
 
-// if(typeof process.env.PORT === 'undefined'){
-//    require('dotenv').config({path:'./.env.development'});
-// }else{
-//    require('dotenv').config({path:'./.env.production'});
-// };
-
-// require('./initialize');
-console.log(process.env);
+require('./initialize');
 require('./routes/updateDbRoute')(app);
 require('./routes/infoRoute')(app);
 require('./routes/deleteRoute')(app);
 
-app.get('/test', async(req,res)=>{
-   res.send('test works');
-});
-// app.get('/', (req,res)=>{
-//    res.send('walekumsalam 5');
-// });
 
 app.listen(process.env.port, ()=>{
    console.log('listening on port ' + process.env.port);
