@@ -77,12 +77,15 @@ module.exports = function(app){
                 creationDate : 0,
                 creationTime : 0
             });
-        articleInfo.tags = tagsStringToArray(articleInfo.tags);
-        const menuItems = await AddArticleModel
-            .find({'menu' : articleInfo.menu})
-            .select({'linkId' : 1, 'menuItemName': 1, 'parentItem' : 1, '_id': 0});
-        const articleMenuItems = generateArticleMenuItems(menuItems);
-        res.status(200).send({'articleInfo' : articleInfo, 'articleMenuItems' : articleMenuItems });
+            logToConsole('articleInfo',articleInfo);
+        if(articleInfo){articleInfo.tags = tagsStringToArray(articleInfo.tags);
+            const menuItems = await AddArticleModel
+                .find({'menu' : articleInfo.menu})
+                .select({'linkId' : 1, 'menuItemName': 1, 'parentItem' : 1, '_id': 0});
+            const articleMenuItems = generateArticleMenuItems(menuItems);
+            res.status(200).send({'articleInfo' : articleInfo, 'articleMenuItems' : articleMenuItems });
+        }
+        
     });
 
     /*****************************************************/
