@@ -80,11 +80,39 @@ function addArticleFiltered(obj, idTime){
                             reference               : reference,
                             active                  : active};
     //logToConsole('addArticleFiltered :: ',newAddArticle);
+    if(imageName1 !== ""){sendImagesToFtp('../fileUpload/' + idTimeImg1 + imageName1, idTimeImg1 + imageName1)};
+    if(imageName2 !== ""){sendImagesToFtp('../fileUpload/' + idTimeImg2 + imageName2, idTimeImg2 + imageName2)};
+    
     return newAddArticle;
 }
 
 /*****************************************************/
-/***************** add new Parent *******************/
+/********************** FTP test *********************/
+/*****************************************************/
+function sendImagesToFtp(image, imageName){
+    var Client = require('ftp');
+    var fs = require('fs');
+   
+    var c = new Client();
+    c.on('ready', function() {
+      c.put(image, imageName, function(err) {
+        if (err) throw err;
+        c.end();
+      });
+    });
+    
+    c.connect({
+       host : 'ftp.militating.com',
+       port : 21,
+       user : 'images@qouh.com',
+       password : 'Images123.',
+       connTimeout : 9000,
+       pasvTimeout : 9000
+    });
+}
+
+/*****************************************************/
+/****************** add new Parent *******************/
 /*****************************************************/
 function addArticleEmptyParent(obj, idTime){
     const { newMenu, selectedMenu, createParent, active, checkBoxCreateMenu} = obj;
