@@ -15,13 +15,13 @@ module.exports = function(app){
         let resultaddArticle = null;
         for (let i = 0; i < articles.length; i++) {
             resultaddArticle = await addArticle(articles[i]);
-            logToConsole('resultaddArticle : '+ i,resultaddArticle);
+            //logToConsole('resultaddArticle : '+ i,resultaddArticle);
         }
         for(let j = 0; j < menus.length; j++ ){
             resultAddMenu = await AddMenuModel(menus[j]);
             const menu = new AddMenuModel(menus[j]);
             const resultMenu = await menu.save();
-            logToConsole('result:' + j, resultMenu);
+            //logToConsole('result:' + j, resultMenu);
         }
         res.status(200).send(req.body);
     });

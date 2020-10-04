@@ -9,10 +9,10 @@ module.exports = function(app){
     /*****************************************************/
     app.post('/loginAdmin', async (req,res)=>{
         const {email, password} = req.body;
-        logToConsole('req.body', req.body);
+        //logToConsole('req.body', req.body);
         const response = await settingsModel.findOne({'adminEmail' : email});
         let token = null;
-        logToConsole('response', response);
+        //logToConsole('response', response);
         let dbPassword = decryption(response.adminPassword);
         //logToConsole('dbPassword', dbPassword);
         try {
@@ -61,6 +61,7 @@ module.exports = function(app){
             const parentArticles   = await AddArticleModel
                 .find({'parentItem' : ''})
                 .select({title: 1, linkId: 1, menu: 1});
+            //logToConsole('parentArticles', parentArticles);
             res.status(200).send({'menus': menus,'parentArticles' : parentArticles});
         });
 
@@ -70,22 +71,23 @@ module.exports = function(app){
     app.post('/getarticleinfowithMenuItems', async (req, res)=>{
         const {linkId} = req.body;
         const articleInfo   = await AddArticleModel
-            .findOne({'linkId' : linkId})
+            .findOne({'linkId' : linkId, 'active' : true})
             .select({
                 _id : 0,
                 __v : 0,
                 creationDate : 0,
                 creationTime : 0
             });
-            logToConsole('articleInfo',articleInfo);
+            //logToConsole('articleInfo',articleInfo);
         if(articleInfo){articleInfo.tags = tagsStringToArray(articleInfo.tags);
             const menuItems = await AddArticleModel
-                .find({'menu' : articleInfo.menu})
+                .find({'menu' : articleInfo.menu, 'active' : true})
                 .select({'linkId' : 1, 'menuItemName': 1, 'parentItem' : 1, '_id': 0});
             const articleMenuItems = generateArticleMenuItems(menuItems);
             res.status(200).send({'articleInfo' : articleInfo, 'articleMenuItems' : articleMenuItems });
+        }else{
+            res.status(204).send(false);
         }
-        
     });
 
     /*****************************************************/
@@ -128,12 +130,13 @@ module.exports = function(app){
     /*****************************************************/
     app.post('/getmenunamesandlinks', async(req,res)=>{
         let menus   = await AddMenuModel
-        .find()
+        .find({'active' : true})
         .select({
             '_id' : 0,
             '__v' : 0,
             'creationDate'  : 0,
             'creationTime'  : 0,
+
         });
 
         let menuLinks = [];

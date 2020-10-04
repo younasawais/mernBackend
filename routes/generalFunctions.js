@@ -136,7 +136,7 @@ function addArticleEmptyParent(obj, idTime){
                             creationDate            : current().today,
                             creationTime            : current().time,
                             reference               : '',
-                            active                  : active};
+                            active                  : active };
     // console.log('newAddParent');
     // console.log(newAddParent);
     return newAddParent;
