@@ -102,10 +102,10 @@ function sendImagesToFtp(image, imageName){
     });
     
     c.connect({
-       host : 'ftp.militating.com',
+       host : process.env.ftphost,
        port : 21,
-       user : 'images@qouh.com',
-       password : 'Images123.',
+       user : process.env.ftpuser,
+       password : process.env.ftppass,
        connTimeout : 9000,
        pasvTimeout : 9000
     });
