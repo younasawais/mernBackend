@@ -159,8 +159,6 @@ function addNewMenu(obj, idTime){
         creationDate            : current().today,
         creationTime            : current().time,
         active                  : true};
-    console.log('addNewMenu');
-    console.log(addNewMenu);
     return addNewMenu;
 }
 

@@ -80,7 +80,7 @@ module.exports = function(app){
         let response = null;
         for (let i = 0; i < publishIds.length; i++) {
             response  = await AddArticleModel.findOneAndUpdate({'linkId' : publishIds[i].id}, {'active' : active});
-            console.log(response);
+            //console.log(response);
         }
         const articles   = await AddArticleModel.find();
         
@@ -95,7 +95,7 @@ module.exports = function(app){
         let response = null;
         for (let i = 0; i < publishIds.length; i++) {
             response  = await AddMenuModel.findOneAndUpdate({'id' : publishIds[i].id}, {'active' : active});
-            console.log(response);
+            //console.log(response);
         }
         let menus   = await AddMenuModel
         .find()
