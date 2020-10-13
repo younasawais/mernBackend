@@ -129,6 +129,7 @@ module.exports = function(app){
     /********************* Get Menu list *****************/
     /*****************************************************/
     app.post('/getmenunamesandlinks', async(req,res)=>{
+        console.log('testingg');
         let menus   = await AddMenuModel
         .find({'active' : true})
         .select({

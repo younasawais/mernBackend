@@ -3,7 +3,9 @@ const bcrypt = require('bcrypt');
 const Cryptr = require('cryptr');
 //const cryptr = new Cryptr(process.env.jwtKey);
 const cryptr = new Cryptr('personalKey');
-const jwt           = require('jsonwebtoken');
+const jwt    = require('jsonwebtoken');
+const path   = require('path');
+
 
 /************* Random functions ****************/
 
@@ -80,8 +82,10 @@ function addArticleFiltered(obj, idTime){
                             reference               : reference,
                             active                  : active};
     //logToConsole('addArticleFiltered :: ',newAddArticle);
-    if(imageName1 !== ""){sendImagesToFtp('../fileUpload/' + idTimeImg1 + imageName1, idTimeImg1 + imageName1)};
-    if(imageName2 !== ""){sendImagesToFtp('../fileUpload/' + idTimeImg2 + imageName2, idTimeImg2 + imageName2)};
+    setTimeout(()=>{
+        if(imageName1 !== ""){sendImagesToFtp('/home/mohammad/mernBackend/fileUpload/' + idTimeImg1 + imageName1, idTimeImg1 + imageName1)};
+        if(imageName2 !== ""){sendImagesToFtp('/home/mohammad/mernBackend/fileUpload/' + idTimeImg2 + imageName2, idTimeImg2 + imageName2)};
+    },1000);
     
     return newAddArticle;
 }
@@ -91,12 +95,13 @@ function addArticleFiltered(obj, idTime){
 /*****************************************************/
 function sendImagesToFtp(image, imageName){
     var Client = require('ftp');
-    var fs = require('fs');
+    //var fs = require('fs');
    
     var c = new Client();
     c.on('ready', function() {
       c.put(image, imageName, function(err) {
-        if (err) throw err;
+        //if (err) throw err;
+        if (err){console.log(err)};
         c.end();
       });
     });
