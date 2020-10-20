@@ -185,6 +185,7 @@ module.exports = function(app){
 
 /**********************General functions ******************/
 function generateArticleMenuItems(menuItems){
+    let menuItemSorted  = [];
     let subItems        = []; 
     for(let i = 0; menuItems.length > i; i++ ){
         if(menuItems[i].parentItem === ''){
