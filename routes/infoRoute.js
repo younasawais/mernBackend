@@ -1,6 +1,5 @@
 const {AddArticleModel, AddMenuModel, settingsModel}      = require('../mongoWorks');
-// const multer        = require('multer');
-const { logToConsole, tagsStringToArray, decryption} = require('./generalFunctions');
+const { logToConsole, current, tagsStringToArray, decryption} = require('./generalFunctions');
 const jwt           = require('jsonwebtoken');
 
 module.exports = function(app){
@@ -60,7 +59,7 @@ module.exports = function(app){
             const menus = await AddMenuModel.find();
             const parentArticles   = await AddArticleModel
                 .find({'parentItem' : ''})
-                .select({title: 1, linkId: 1, menu: 1});
+                .select({title: 1, linkId: 1, menu: 1, tags: 1, reference : 1});
             //logToConsole('parentArticles', parentArticles);
             res.status(200).send({'menus': menus,'parentArticles' : parentArticles});
         });
@@ -159,8 +158,7 @@ module.exports = function(app){
             '_id' : 0,
             '__v' : 0,
             'creationDate'  : 0,
-            'creationTime'  : 0,
-
+            'creationTime'  : 0
         });
 
         let menuLinks = [];
@@ -179,6 +177,7 @@ module.exports = function(app){
         res.send('test post works');
     });
 
+    /****************** Test function ******************/   
     app.get('/testget', (req,res)=>{
         res.send('test get works');
      });
@@ -186,8 +185,7 @@ module.exports = function(app){
 
 /**********************General functions ******************/
 function generateArticleMenuItems(menuItems){
-    let subItems        = [];
-    let menuItemSorted  = [];
+    let subItems        = []; 
     for(let i = 0; menuItems.length > i; i++ ){
         if(menuItems[i].parentItem === ''){
             menuItemSorted.push({
@@ -213,6 +211,7 @@ function generateArticleMenuItems(menuItems){
     }
     return menuItemSorted;
 }
+
 
 
 /*****************************************************/

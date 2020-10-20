@@ -1,4 +1,6 @@
 const {addArticle, addMenu, AddArticleModel}      = require('../mongoWorks');
+// const multer        = require('multer');
+const fs = require('fs');
 const {addArticleFiltered, addArticleEmptyParent, getParentAndChildren, addNewMenu, current, logToConsole} = require('./generalFunctions.js');
 
 const { AddMenuModel } = require("../mongoWorks");
@@ -106,4 +108,35 @@ module.exports = function(app){
         let parentsAndChildren = getParentAndChildren(menus);
         res.send({menus: menus, children : (await parentsAndChildren).children, parents : (await parentsAndChildren).parents});
     });
+
+
+    /*****************************************************/
+    /********************* Backup DB *********************/
+    /*****************************************************/
+    app.post('/backupArticlesAndMenus', async (req,res)=>{
+        const articleInfo   = await AddArticleModel.find().select('-__v -_id');
+        const menuInfo      = await AddMenuModel.find().select('-__v -_id');
+        fs.writeFile(current().id + '_BackupArticles.json', dbToJson(articleInfo),'utf8', ()=>{
+            console.log('ArticlesBackup Done..')
+        });
+        fs.writeFile(current().id + '_BackupMenus.json', dbToJson(menuInfo),'utf8', ()=>{
+            console.log('MenusBackup Done..')
+        });
+
+        res.status(200).send({works: "In Process.."});
+    });
+}
+
+
+/*****************************************************/
+/***************** DB to JSON ************************/
+/*****************************************************/
+function dbToJson(dbInfo){
+    let jsonFixed = dbInfo.toString();
+    jsonFixed = jsonFixed.replace(/"/g, "'");
+    jsonFixed = jsonFixed.replace(/(\s{2})(_?_?[a-zA-Z0-9]+)(:\s)/g,'$1' + '"' + '$2' + '"' + '$3');
+    jsonFixed = jsonFixed.replace(/(\s)'(.+)'(,\n)/g, '$1'+ '"' + '$2' + '"' + '$3');
+    jsonFixed = jsonFixed.replace(/(:\s)''(,)/g, '$1'+'""'+'$2');
+    jsonFixed = jsonFixed.replace(/({\s)([a-zA-Z0-9]+)(:)/g,'$1' +'"' + '$2' + '"' + '$3');
+    return jsonFixed;
 }
