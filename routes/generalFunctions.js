@@ -30,14 +30,24 @@ function current(){
     let date = new Date();
     // let tempYear = date.getFullYear();
     // console.log(tempYear);
-
-    let dd = String(date.getDate()).padStart(2, '0');
-    let mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let dd = String(date.getDate()).padStart(2, "0");
+    let mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
     let yyyy = date.getFullYear() - 2000;
+    let ho  = date.getHours();
+    let mi  = date.getMinutes();
+    let se  = date.getSeconds();
+  
+    if (mm < 10){ mm = '0' + mm};
+    if (dd < 10){ dd = '0' + dd};
+    if (ho < 10){ ho = '0' + ho};
+    if (mi < 10){ mi = '0' + mi};
+    if (se < 10){ se = '0' + se};
+  
     let datum = {
-        today : dd + '/' + mm + '/' + yyyy,
-        time : date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(),
-        id: yyyy+mm+dd+date.getHours() + date.getMinutes() + date.getSeconds()}
+      today: dd + "/" + mm + "/" + yyyy,
+      time: ho + ":" + mi + ":" + se,
+      id: yyyy + mm + dd + ho + mi + se
+    };
     return datum;
 }
 
